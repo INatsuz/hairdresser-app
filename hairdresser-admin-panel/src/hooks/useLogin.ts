@@ -1,6 +1,7 @@
 import {getWithAuth, postWithAuth} from "../utils/requester.ts";
 import {useDispatch} from "react-redux";
 import {login as reduxLogin, logout as reduxLogout} from "../redux/sessionSlice.ts";
+import {UserType} from "../types/User.ts";
 
 export default function useLogin() {
 	const dispatch = useDispatch();
@@ -26,7 +27,7 @@ export default function useLogin() {
 			console.log(res.data);
 			const accessToken: string = res.data.accessToken;
 
-			if (accessToken) {
+			if (accessToken && res.data.user.userType === UserType.ADMIN) {
 				dispatch(reduxLogin(res.data.user));
 			} else {
 				dispatch(reduxLogout());
@@ -41,16 +42,20 @@ export default function useLogin() {
 		});
 	}
 
-	function logout(): void {
-		getWithAuth("/users/logout").then(res => {
+	function logout(): Promise<boolean> {
+		return getWithAuth("/users/logout").then(res => {
 			console.log(res.data);
 			const isLoggedIn: boolean = res.data.loggedIn;
 
 			if (!isLoggedIn) {
 				dispatch(reduxLogout());
+				return true;
 			}
+
+			return false;
 		}).catch(err => {
 			console.log(err);
+			return false;
 		});
 	}
 

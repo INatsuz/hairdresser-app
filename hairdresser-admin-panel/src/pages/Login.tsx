@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Navbar from "../components/Navbar/Navbar.tsx";
 import useLogin from "../hooks/useLogin.ts";
 import {useNavigate} from "react-router-dom";
@@ -7,6 +7,8 @@ const Login: React.FC = () => {
 
 	const [login] = useLogin();
 	const navigate = useNavigate();
+
+	const [failedLogin, setFailedLogin] = useState<boolean>(false);
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
 		// Cancelling the submit event so page won't reload
@@ -26,6 +28,8 @@ const Login: React.FC = () => {
 			if (res) {
 				navigate(`/appointments`);
 			}
+		}).catch(() => {
+			setFailedLogin(true);
 		});
 	}
 
@@ -33,17 +37,23 @@ const Login: React.FC = () => {
 		<>
 			<Navbar/>
 			<div className={"container py-5"}>
-				<form className={"bg-light rounded p-3 shadow"} onSubmit={handleSubmit}>
+				{
+					failedLogin &&
+					<div className={"alert alert-danger"} data-testid={"failed-login-alert"}>
+						Failed to login. Please check your credentials and try again.
+					</div>
+				}
+				<form className={"bg-light rounded p-3 shadow"} data-testid={"login-form"} onSubmit={handleSubmit}>
 					<div className={"mb-3"}>
-						<label htmlFor="username" className="form-label">Username</label>
-						<input type="text" className="form-control" name="username" id={"username"}/>
+						<label htmlFor="username" className="form-label" data-testid={"username-label"}>Username</label>
+						<input type="text" className="form-control" name="username" id={"username"} data-testid={"username-input"}/>
 					</div>
 					<div className={"mb-3"}>
-						<label htmlFor="password" className="form-label">Password</label>
-						<input type="password" className="form-control" name="password" id={"password"}/>
+						<label htmlFor="password" className="form-label" data-testid={"password-label"}>Password</label>
+						<input type="password" className="form-control" name="password" id={"password"} data-testid={"password-input"}/>
 					</div>
 					<div>
-						<button type={"submit"} className="btn btn-primary">Login</button>
+						<button type={"submit"} className="btn btn-primary" data-testid={"login-submit-btn"}>Login</button>
 					</div>
 				</form>
 			</div>

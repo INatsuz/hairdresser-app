@@ -19,7 +19,7 @@ const UsersTable: React.FC<UsersTableProps> = ({users, setUsers}) => {
 
 	return (
 		<>
-			<table className={"table table-striped table-hover"}>
+			<table className={"table table-striped table-hover"} data-testid={"users-table"}>
 				<thead>
 					<tr>
 						<th>ID</th>

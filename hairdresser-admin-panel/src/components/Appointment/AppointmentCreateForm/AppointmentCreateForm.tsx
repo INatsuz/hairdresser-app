@@ -24,6 +24,7 @@ const AppointmentCreateForm: React.FC = () => {
 	const [timeStart, setTimeStart] = useState<Date>(new Date());
 	const [timeEnd, setTimeEnd] = useState<Date>(new Date());
 	const [price, setPrice] = useState<number>(0);
+	const [observations, setObservations] = useState<string>("");
 
 	const comboText = useRef<string>("");
 
@@ -37,6 +38,7 @@ const AppointmentCreateForm: React.FC = () => {
 		if (clients.length > 0) {
 			setClient(clients[0]);
 			setClientComboText(clients[0]);
+			comboText.current = clients[0].name;
 		}
 	}, [clients]);
 
@@ -84,7 +86,8 @@ const AppointmentCreateForm: React.FC = () => {
 				assignedUser: user ? user.ID : null,
 				price: price,
 				timeStart: `${timeStart.getUTCFullYear()}-${timeStart.getUTCMonth() + 1}-${timeStart.getUTCDate()} ${timeStart.getUTCHours()}:${timeStart.getUTCMinutes()}:00`,
-				timeEnd: `${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth() + 1}-${timeEnd.getUTCDate()} ${timeEnd.getUTCHours()}:${timeEnd.getUTCMinutes()}:00`
+				timeEnd: `${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth() + 1}-${timeEnd.getUTCDate()} ${timeEnd.getUTCHours()}:${timeEnd.getUTCMinutes()}:00`,
+				observations: observations
 			}).then(() => {
 				navigate("/appointments");
 			});
@@ -163,6 +166,14 @@ const AppointmentCreateForm: React.FC = () => {
 							users.map(user => <option value={user.ID} key={user.ID}>{user.name}</option>)
 						}
 					</select>
+				</div>
+				<div className={"mb-3"}>
+					<label htmlFor="observations" className="form-label">Observations</label>
+					<textarea value={observations} name="observations" id="observations" rows={3} className={"form-control"} onChange={e => setObservations(e.target.value)} />
+					<div className="alert alert-warning p-2 mt-2" role={"alert"}>
+						Careful: When you change the service, this field is automatically changed to the default price
+						of that service.
+					</div>
 				</div>
 				<div>
 					<button type={"submit"} className="btn btn-success">Create</button>

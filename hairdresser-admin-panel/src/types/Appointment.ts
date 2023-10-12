@@ -9,4 +9,5 @@ export default interface Appointment {
 	price: number;
 	timeStart: Date;
 	timeEnd: Date;
+	observations: string;
 }

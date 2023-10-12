@@ -55,7 +55,8 @@ function verifyLoginAndGenerateTokens(username, password, ...types) {
 		verifyLoginCredentials(username, password, ...types).then(result => {
 			let payload = {
 				ID: result.ID,
-				username: result.username
+				username: result.username,
+				userType: result.userType
 			};
 
 			generateTokens(payload).then(tokens => {

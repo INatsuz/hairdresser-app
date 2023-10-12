@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://dev.vraminhos.com"
+const API_URL = import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
 
 export function getWithAuth(url: string): Promise<any> {

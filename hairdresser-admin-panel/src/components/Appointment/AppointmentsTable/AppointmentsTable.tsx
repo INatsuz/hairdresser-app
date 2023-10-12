@@ -19,7 +19,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({appointments, setA
 
 	return (
 		<>
-			<table className={"table table-striped table-hover"}>
+			<table className={"table table-striped table-hover"} data-testid={"appointments-table"}>
 				<thead>
 					<tr>
 						<th>ID</th>

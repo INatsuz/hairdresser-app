@@ -6,7 +6,7 @@ const {
 	verifyToken,
 	generateTokens,
 	mustBeAuthenticated,
-	USER_TYPES, ACCESS_TOKEN_DURATION, mustBeAdmin
+	USER_TYPES, mustBeAdmin
 } = require("../utils/authentication");
 const db = require('../utils/db');
 
@@ -14,16 +14,18 @@ const SALT_ROUNDS = 10;
 
 // Login POST method
 router.post('/login', function (req, res, next) {
+
+	console.log(req.body);
 	verifyLoginAndGenerateTokens(req.body.username, req.body.password).then(({accessToken, refreshToken, payload}) => {
 		let date = new Date();
-		date.setTime(date.getTime() + 2 * 60 * 60 * 1000)
+		date.setTime(date.getTime() + 2 * 60 * 60 * 1000);
 
 		res.cookie("jwt", `Bearer ${accessToken}`, {
 			secure: true,
 			httpOnly: true,
 			expires: date,
 			sameSite: "none"
-		})
+		});
 
 		res.status(200).json({accessToken: accessToken, refreshToken: refreshToken, user: payload});
 
@@ -81,7 +83,8 @@ router.get("/checkLogin", mustBeAuthenticated, function (req, res, next) {
 			"loggedIn": true,
 			user: {
 				ID: req.tokenPayload.ID,
-				username: user[0].username
+				username: user[0].username,
+				userType: user[0].userType
 			}
 		});
 	});

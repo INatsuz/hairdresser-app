@@ -19,10 +19,6 @@ import EditAppointment from "./pages/Appointment/EditAppointment.tsx";
 const App: React.FC = () => {
 	const [, checkLogin] = useLogin();
 
-	useEffect(() => {
-		checkLogin();
-	}, [checkLogin])
-
 	const router = createBrowserRouter([
 		{
 			path: "/",
@@ -85,6 +81,12 @@ const App: React.FC = () => {
 			element: <Login/>
 		}
 	]);
+
+	useEffect(() => {
+		checkLogin();
+	}, [checkLogin])
+
+
 
 	return (
 		<>

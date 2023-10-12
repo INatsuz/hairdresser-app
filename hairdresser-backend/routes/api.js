@@ -32,8 +32,8 @@ router.get('/getAssignedAppointments', mustBeAuthenticated, function (req, res) 
 });
 
 router.post('/addAppointment', mustBeAdmin, function (req, res) {
-	db.query("INSERT INTO appointment(serviceID, clientID, assignedUser, price, timeStart, timeEnd) VALUES(?, ?, ?, ?, ?, ?)",
-		[req.body.service, req.body.client, req.body.assignedUser, req.body.price, req.body.timeStart, req.body.timeEnd]).then(({result}) => {
+	db.query("INSERT INTO appointment(serviceID, clientID, assignedUser, price, timeStart, timeEnd, observations) VALUES(?, ?, ?, ?, ?, ?, ?)",
+		[req.body.service, req.body.client, req.body.assignedUser, req.body.price, req.body.timeStart, req.body.timeEnd, req.body.observations]).then(({result}) => {
 		res.status(200).send("Added new assignment successfully");
 		console.log("Added new assignment successfully");
 	}).catch(err => {
@@ -44,8 +44,8 @@ router.post('/addAppointment', mustBeAdmin, function (req, res) {
 });
 
 router.put("/editAppointment", mustBeAdmin, function (req, res) {
-	db.query("UPDATE appointment SET serviceID = ?, clientID = ?, assignedUser = ?, price = ?, timeStart = ?, timeEnd = ? WHERE ID = ?",
-		[req.body.service, req.body.client, req.body.assignedUser, req.body.price, req.body.timeStart, req.body.timeEnd, req.body.ID]).then(() => {
+	db.query("UPDATE appointment SET serviceID = ?, clientID = ?, assignedUser = ?, price = ?, timeStart = ?, timeEnd = ?, observations = ? WHERE ID = ?",
+		[req.body.service, req.body.client, req.body.assignedUser, req.body.price, req.body.timeStart, req.body.timeEnd, req.body.observations, req.body.ID]).then(() => {
 		res.status(200).send("Edited appointment successfully");
 		console.log("Edited appointment successfully");
 	}).catch(err => {
@@ -78,7 +78,7 @@ router.get('/getClients', mustBeAdmin, function (req, res) {
 });
 
 router.post('/addClient', mustBeAdmin, function (req, res) {
-	db.query("INSERT INTO client(name, phone) VALUES(?, ?)", [req.body.name, req.body.phone]).then(() => {
+	db.query("INSERT INTO client(name, phone, email, birthday, nif, observations) VALUES(?, ?, ?, ?, ?, ?)", [req.body.name, req.body.phone, req.body.email, req.body.birthday, req.body.nif, req.body.observations]).then(() => {
 		res.status(200).send("Added new client successfully");
 		console.log("Added new client successfully");
 	}).catch(err => {
@@ -89,7 +89,7 @@ router.post('/addClient', mustBeAdmin, function (req, res) {
 });
 
 router.put("/editClient", mustBeAdmin, function (req, res) {
-	db.query("UPDATE client SET name = ?, phone = ? WHERE ID = ?", [req.body.name, req.body.phone, req.body.ID]).then(() => {
+	db.query("UPDATE client SET name = ?, phone = ?, email = ?, birthday = ?, nif = ?, observations = ? WHERE ID = ?", [req.body.name, req.body.phone, req.body.email, req.body.birthday, req.body.nif, req.body.observations, req.body.ID]).then(() => {
 		res.status(200).send("Edited client successfully");
 		console.log("Edited client successfully");
 	}).catch(err => {
@@ -122,7 +122,7 @@ router.get('/getServices', mustBeAdmin, function (req, res) {
 });
 
 router.post('/addService', mustBeAdmin, function (req, res) {
-	db.query("INSERT INTO service(name, price, estimatedTime) VALUES(?, ?, ?)", [req.body.name, req.body.price, req.body.estimatedTime]).then(() => {
+	db.query("INSERT INTO service(name, price, estimatedTime, color) VALUES(?, ?, ?, ?)", [req.body.name, req.body.price, req.body.estimatedTime, req.body.color]).then(() => {
 		res.status(200).send("Added new service successfully");
 		console.log("Added new service successfully");
 	}).catch(err => {
@@ -133,7 +133,7 @@ router.post('/addService', mustBeAdmin, function (req, res) {
 });
 
 router.put("/editService", mustBeAdmin, function (req, res) {
-	db.query("UPDATE service SET name = ?, price = ?, estimatedTime = ? WHERE ID = ?", [req.body.name, req.body.price, req.body.estimatedTime, req.body.ID]).then(() => {
+	db.query("UPDATE service SET name = ?, price = ?, estimatedTime = ?, color = ? WHERE ID = ?", [req.body.name, req.body.price, req.body.estimatedTime, req.body.color, req.body.ID]).then(() => {
 		res.status(200).send("Edited service successfully");
 		console.log("Edited service successfully");
 	}).catch(err => {

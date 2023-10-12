@@ -18,7 +18,7 @@ http_app.use(function (req, res) {
 
 const app = express();
 
-app.use(cors({origin: "http://127.0.0.1:5173", credentials: true }))
+app.use(cors({origin: ["http://127.0.0.1:5173", "http://localhost:3000"], credentials: true }))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));

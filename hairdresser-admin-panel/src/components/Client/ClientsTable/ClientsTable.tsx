@@ -19,7 +19,7 @@ const ClientsTable: React.FC<ClientsTableProps> = ({clients, setClients}) => {
 
 	return (
 		<>
-			<table className={"table table-striped table-hover"}>
+			<table className={"table table-striped table-hover"} data-testid={"clients-table"}>
 				<thead>
 					<tr>
 						<th>ID</th>

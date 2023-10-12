@@ -9,10 +9,15 @@ const ServiceCreateForm: React.FC = () => {
 	const [name, setName] = useState<string>("");
 	const [price, setPrice] = useState<number>(0);
 	const [estimatedTime, setEstimatedTime] = useState<number>(0);
+	const [color, setColor] = useState<string>("#000000");
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
 		// Cancelling the submit event so page won't reload
 		e.preventDefault();
+
+		if (name.trim().length === 0) {
+			return;
+		}
 
 		if (isNaN(price)) {
 			return;
@@ -24,7 +29,8 @@ const ServiceCreateForm: React.FC = () => {
 		postWithAuth("/api/addService", {
 			name: name.trim(),
 			price,
-			estimatedTime
+			estimatedTime,
+			color
 		}).then(() => {
 			navigate("/services");
 		});
@@ -64,8 +70,12 @@ const ServiceCreateForm: React.FC = () => {
 						</div>
 					}
 				</div>
+				<div className={"mb-3"}>
+					<label htmlFor="color" className="form-label">Color</label>
+					<input type="color" id={"color"} value={color} name={"color"} className={"form-control form-control-color"} onChange={e => setColor(e.target.value)}/>
+				</div>
 				<div>
-					<button type={"submit"} className="btn btn-success">Create</button>
+					<button type={"submit"} className="btn btn-success">Edit</button>
 				</div>
 			</form>
 		</>

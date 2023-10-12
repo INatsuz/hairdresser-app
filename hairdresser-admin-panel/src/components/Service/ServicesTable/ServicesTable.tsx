@@ -19,13 +19,14 @@ const ServicesTable: React.FC<ServicesTableProps> = ({services, setServices}) =>
 
 	return (
 		<>
-			<table className={"table table-striped table-hover"}>
+			<table className={"table table-striped table-hover"} data-testid={"services-table"}>
 				<thead>
 					<tr>
 						<th>ID</th>
 						<th>Name</th>
 						<th>Price</th>
 						<th>Estimated Time</th>
+						<th>Color</th>
 						<th></th>
 					</tr>
 				</thead>

@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {StatusBar} from 'expo-status-bar';
+import {StyleSheet, useColorScheme, View} from 'react-native';
+import {Provider} from "react-redux";
+import {store} from "./redux/store";
+import {createNavigationContainerRef, DarkTheme, DefaultTheme, NavigationContainer} from "@react-navigation/native";
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
+import LoginTabStackNavigator from "./screens/navigators/LoginTabStackNavigator";
+
+const navigationRef = createNavigationContainerRef();
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+	const colorScheme = useColorScheme();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+	return (
+		<Provider store={store}>
+				<NavigationContainer ref={navigationRef} theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+					<LoginTabStackNavigator/>
+				</NavigationContainer>
+		</Provider>
+	);
+}

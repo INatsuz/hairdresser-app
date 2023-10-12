@@ -11,9 +11,14 @@ const ServiceEditForm: React.FC = () => {
 	const [name, setName] = useState<string>(service.name);
 	const [price, setPrice] = useState<number>(service.price);
 	const [estimatedTime, setEstimatedTime] = useState<number>(service.estimatedTime);
+	const [color, setColor] = useState<string>(service.color);
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
 		// Cancelling the submit event so page won't reload
 		e.preventDefault();
+
+		if (name.trim().length === 0) {
+			return;
+		}
 
 		if (isNaN(price)) {
 			return;
@@ -26,7 +31,8 @@ const ServiceEditForm: React.FC = () => {
 			ID: service.ID,
 			name: name.trim(),
 			price,
-			estimatedTime
+			estimatedTime,
+			color
 		}).then(() => {
 			navigate("/services");
 		});
@@ -65,6 +71,10 @@ const ServiceEditForm: React.FC = () => {
 							This field cannot be left empty.
 						</div>
 					}
+				</div>
+				<div className={"mb-3"}>
+					<label htmlFor="color" className="form-label">Color</label>
+					<input type="color" id={"color"} value={color} name={"color"} className={"form-control form-control-color"} onChange={e => setColor(e.target.value)}/>
 				</div>
 				<div>
 					<button type={"submit"} className="btn btn-success">Create</button>

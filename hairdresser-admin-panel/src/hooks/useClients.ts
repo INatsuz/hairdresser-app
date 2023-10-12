@@ -11,6 +11,12 @@ export default function useClients() {
 
 	useEffect(() => {
 		getWithAuth("/api/getClients").then(res => {
+			res.data.forEach((client: Client) => {
+				if (client.birthday) {
+					client.birthday = new Date(client.birthday);
+				}
+			});
+
 			setClients(res.data);
 		}).catch(() => {
 			dispatch(logout());

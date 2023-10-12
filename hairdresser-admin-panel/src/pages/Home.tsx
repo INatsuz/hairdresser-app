@@ -1,12 +1,13 @@
 import React from 'react'
 import Navbar from "../components/Navbar/Navbar.tsx";
+import {Navigate} from "react-router-dom";
 
 const Home: React.FC = () => {
 
 	return (
 		<>
 			<Navbar/>
-			<h1>No place like 127.0.0.1</h1>
+			<Navigate to={"/appointments"}/>
 		</>
 	)
 }

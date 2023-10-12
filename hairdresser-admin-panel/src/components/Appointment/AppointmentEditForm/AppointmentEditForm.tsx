@@ -27,6 +27,7 @@ const AppointmentEditForm: React.FC = () => {
 	const [timeStart, setTimeStart] = useState<Date>(new Date(appointment.timeStart));
 	const [timeEnd, setTimeEnd] = useState<Date>(new Date(appointment.timeEnd));
 	const [price, setPrice] = useState<number>(appointment.price);
+	const [observations, setObservations] = useState<string>(appointment.observations);
 
 	const comboText = useRef<string>(appointment.clientName);
 
@@ -95,7 +96,8 @@ const AppointmentEditForm: React.FC = () => {
 				assignedUser: user ? user.ID : null,
 				price: price,
 				timeStart: `${timeStart.getUTCFullYear()}-${timeStart.getUTCMonth() + 1}-${timeStart.getUTCDate()} ${timeStart.getUTCHours()}:${timeStart.getUTCMinutes()}:00`,
-				timeEnd: `${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth() + 1}-${timeEnd.getUTCDate()} ${timeEnd.getUTCHours()}:${timeEnd.getUTCMinutes()}:00`
+				timeEnd: `${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth() + 1}-${timeEnd.getUTCDate()} ${timeEnd.getUTCHours()}:${timeEnd.getUTCMinutes()}:00`,
+				observations: observations.trim()
 			}).then(() => {
 				navigate("/appointments");
 			});
@@ -175,8 +177,12 @@ const AppointmentEditForm: React.FC = () => {
 						}
 					</select>
 				</div>
+				<div className={"mb-3"}>
+					<label htmlFor="observations" className="form-label">Observations</label>
+					<textarea value={observations} name="observations" id="observations" rows={3} className={"form-control"} onChange={e => setObservations(e.target.value)} />
+				</div>
 				<div>
-					<button type={"submit"} className="btn btn-success">Create</button>
+					<button type={"submit"} className="btn btn-success">Edit</button>
 				</div>
 			</form>
 		</>

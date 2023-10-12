@@ -14,7 +14,7 @@ const AuthRequired: React.FC<AuthRequiredProps> = ({children}) => {
 		<>
 			{
 				loggedIn === false ?
-				<Navigate to={"/"}/>
+				<Navigate to={"/login"}/>
 				:
 				children
 			}

@@ -7,6 +7,14 @@ export const store = configureStore({
 	}
 });
 
+export const createNewStore = () => {
+	return configureStore({
+		reducer: {
+			session: sessionReducer
+		}
+	});
+}
+
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
 

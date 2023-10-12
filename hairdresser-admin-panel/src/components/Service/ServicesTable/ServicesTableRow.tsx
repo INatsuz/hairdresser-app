@@ -32,6 +32,7 @@ const ServicesTableRow: React.FC<ServicesTableRowProps> = ({service, deleteServi
 				<td>{service.name}</td>
 				<td>€{(service.price / 100).toFixed(2)}</td>
 				<td>{service.estimatedTime} minutes</td>
+				<td><div className={"color-square"} style={{backgroundColor: `${service.color}`}}></div></td>
 				<td className={"text-end"}>
 					<button className={"btn btn-sm btn-primary me-2"}><i className={"bi-list"}></i></button>
 					<button className={"btn btn-sm btn-warning me-2"}><i className={"bi-pencil"} onClick={handleEditClick}></i></button>

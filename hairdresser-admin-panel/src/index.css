@@ -11,3 +11,8 @@ td {
     border-radius: 0.375em;
 }
 
+.color-square {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+}

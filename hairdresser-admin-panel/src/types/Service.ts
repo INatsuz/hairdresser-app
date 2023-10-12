@@ -3,4 +3,5 @@ export default interface Service {
 	name: string;
 	price: number;
 	estimatedTime: number;
+	color: string;
 }
