@@ -13,7 +13,7 @@
         "buildType": "apk"
       },
       "env": {
-        "API_URL": "vraminhos.com"
+        "EXPO_PUBLIC_API_URL": "vraminhos.com"
       }
     },
     "production": {}
