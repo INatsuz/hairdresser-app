@@ -84,6 +84,7 @@ router.get("/checkLogin", mustBeAuthenticated, function (req, res, next) {
 			user: {
 				ID: req.tokenPayload.ID,
 				username: user[0].username,
+				name: user[0].name,
 				userType: user[0].userType
 			}
 		});

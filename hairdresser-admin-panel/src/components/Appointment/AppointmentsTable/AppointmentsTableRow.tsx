@@ -37,7 +37,7 @@ const AppointmentsTableRow: React.FC<AppointmentsTableRowProps> = ({appointment,
 				<td>{`${appointment.timeEnd.getDate().toString().padStart(2, '0')}/${(appointment.timeEnd.getMonth() + 1).toString().padStart(2, '0')}/${appointment.timeEnd.getFullYear()} - ${appointment.timeEnd.getHours().toString().padStart(2, '0')}:${appointment.timeEnd.getMinutes().toString().padStart(2, '0')}`}</td>
 				<td className={"text-end"}>
 					<button className={"btn btn-sm btn-primary me-2"}><i className={"bi-list"}></i></button>
-					<button className={"btn btn-sm btn-warning me-2"}><i className={"bi-pencil"} onClick={handleEditClick}></i></button>
+					<button className={"btn btn-sm btn-warning me-2"} onClick={handleEditClick}><i className={"bi-pencil"}></i></button>
 					<button className={"btn btn-sm btn-danger me-2"} onClick={handleDeleteClick}>
 						<i className={"bi-trash"}></i></button>
 				</td>

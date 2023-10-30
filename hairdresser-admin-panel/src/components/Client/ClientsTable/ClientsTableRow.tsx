@@ -32,10 +32,8 @@ const ClientsTableRow: React.FC<ClientsTableRowProps> = ({client, deleteClient})
 				<td>{client.phone}</td>
 				<td className={"text-end"}>
 					<button className={"btn btn-sm btn-primary me-2"}><i className={"bi-list"}></i></button>
-					<button className={"btn btn-sm btn-warning me-2"} onClick={handleEditClick}><i className={"bi-pencil"}></i>
-					</button>
-					<button className={"btn btn-sm btn-danger me-2"} onClick={handleDeleteClick}>
-						<i className={"bi-trash"}></i></button>
+					<button className={"btn btn-sm btn-warning me-2"} onClick={handleEditClick}><i className={"bi-pencil"}></i></button>
+					<button className={"btn btn-sm btn-danger me-2"} onClick={handleDeleteClick}><i className={"bi-trash"}></i></button>
 				</td>
 			</tr>
 		</>

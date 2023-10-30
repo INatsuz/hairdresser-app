@@ -8,6 +8,7 @@ export default function Login({route, navigation}) {
 	const [checkLogin, login] = useLogin();
 
 	const isLoggedIn = useSelector(state => state.session.loggedIn);
+	console.log(isLoggedIn);
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -46,12 +47,10 @@ export default function Login({route, navigation}) {
 	)
 };
 
-const {StatusBarManager} = NativeModules;
-const statusBarHeight = Platform.OS === "ios" ? 20 : StatusBarManager.HEIGHT;
-
 const styles = StyleSheet.create({
 	kbContainer: {
-		flex: 1
+		flex: 1,
+		backgroundColor: "white"
 	},
 
 	container: {

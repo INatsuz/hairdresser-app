@@ -20,7 +20,7 @@ function verifyLoginCredentials(username, password, ...types) {
 
 	let userTypeFilter = ` AND (${userTypeFilters.join(" OR ")})`;
 
-	let query = "SELECT ID, username, password, userType FROM appuser WHERE username = ?" + (types.length > 0 ? userTypeFilter : "");
+	let query = "SELECT ID, username, name, password, userType FROM appuser WHERE username = ?" + (types.length > 0 ? userTypeFilter : "");
 	let params = (types.length > 0 ? [username, ...typeFilterParams] : [username]);
 
 	return new Promise((resolve, reject) => {
@@ -56,6 +56,7 @@ function verifyLoginAndGenerateTokens(username, password, ...types) {
 			let payload = {
 				ID: result.ID,
 				username: result.username,
+				name: result.name,
 				userType: result.userType
 			};
 

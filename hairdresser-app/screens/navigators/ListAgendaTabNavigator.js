@@ -1,6 +1,7 @@
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import Home from "../Home";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import HomeStackNavigator from "./HomeStackNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -8,8 +9,8 @@ export default function ListAgendaTabNavigator() {
 	return (
 		<Tab.Navigator>
 			<Tab.Screen
-				name={"Home"}
-				component={Home}
+				name={"HomeStackNavigator"}
+				component={HomeStackNavigator}
 				options={
 					{
 						title: 'Home',

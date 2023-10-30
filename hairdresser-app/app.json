@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "hairdresser-app",
+    "name": "Hairdresser",
     "slug": "hairdresser-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.inatsuz.hairdresserapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b1bd39f4-43ca-4b86-b813-7b6790df05ef"
+      }
     }
   }
 }

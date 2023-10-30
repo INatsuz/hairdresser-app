@@ -1,23 +1,24 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, useColorScheme, View} from 'react-native';
+import {StatusBar, useColorScheme, View} from 'react-native';
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
-import {createNavigationContainerRef, DarkTheme, DefaultTheme, NavigationContainer} from "@react-navigation/native";
+import {createNavigationContainerRef, NavigationContainer} from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import LoginTabStackNavigator from "./screens/navigators/LoginTabStackNavigator";
+import commonStyles from "./styles/commonStyles";
 
 const navigationRef = createNavigationContainerRef();
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-	const colorScheme = useColorScheme();
-
 	return (
-		<Provider store={store}>
-				<NavigationContainer ref={navigationRef} theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+		<View style={[commonStyles.flex1Container, {backgroundColor: "white"}]}>
+			<StatusBar backgroundColor={"white"} translucent={true}/>
+			<Provider store={store}>
+				<NavigationContainer ref={navigationRef}>
 					<LoginTabStackNavigator/>
 				</NavigationContainer>
-		</Provider>
+			</Provider>
+		</View>
 	);
 }

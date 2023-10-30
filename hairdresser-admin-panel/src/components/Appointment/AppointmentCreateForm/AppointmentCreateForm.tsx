@@ -170,10 +170,6 @@ const AppointmentCreateForm: React.FC = () => {
 				<div className={"mb-3"}>
 					<label htmlFor="observations" className="form-label">Observations</label>
 					<textarea value={observations} name="observations" id="observations" rows={3} className={"form-control"} onChange={e => setObservations(e.target.value)} />
-					<div className="alert alert-warning p-2 mt-2" role={"alert"}>
-						Careful: When you change the service, this field is automatically changed to the default price
-						of that service.
-					</div>
 				</div>
 				<div>
 					<button type={"submit"} className="btn btn-success">Create</button>
