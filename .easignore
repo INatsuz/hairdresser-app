@@ -1,7 +1,5 @@
-.env*
+*.env*
+*.idea
 
 hairdresser-admin-panel
 hairdresser-backend
-
-.idea
-hairdresser-app/.idea
