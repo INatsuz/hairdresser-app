@@ -2,3 +2,5 @@ hairdresser-backend/node_modules
 hairdresser-app/node_modules
 hairdresser-admin-panel/node_modules
 .idea
+
+*.env*
