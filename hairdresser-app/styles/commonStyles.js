@@ -1,7 +1,7 @@
 import {NativeModules, Platform, StyleSheet} from "react-native";
 
 const {StatusBarManager} = NativeModules;
-const statusBarHeight = Platform.OS === "ios" ? 20 : StatusBarManager.HEIGHT;
+const statusBarHeight = Platform.OS === "ios" ? 0 : StatusBarManager.HEIGHT;
 
 const styles = StyleSheet.create({
 	topPaddingContainer: {
@@ -55,11 +55,21 @@ const styles = StyleSheet.create({
 	},
 
 	iosTimeSection: {
-		marginBottom: 15,
+		marginBottom: 10,
 		display: "flex",
 		flexDirection: "row",
 		alignItems: "center"
 	},
+
+	warning: {
+		padding: 5,
+		borderStyle: "solid",
+		borderWidth: 1,
+		borderColor: "#ffe69c",
+		borderRadius: 5,
+		color: "#664d03",
+		backgroundColor: "#fff3cd"
+	}
 });
 
 export default styles;

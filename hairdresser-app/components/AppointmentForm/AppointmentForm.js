@@ -1,7 +1,7 @@
 import useServices from "../../hooks/useServices";
 import useClients from "../../hooks/useClients";
 import useUsers from "../../hooks/useUsers";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
 	Alert,
 	Button,
@@ -40,6 +40,17 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 
 	let timeStartString = String(timeStart.getDate()).padStart(2, "0") + "/" + String(timeStart.getMonth() + 1).padStart(2, "0") + "/" + timeStart.getFullYear() + " " + String(timeStart.getHours()).padStart(2, "0") + ":" + String(timeStart.getMinutes()).padStart(2, "0");
 	let timeEndString = String(timeEnd.getDate()).padStart(2, "0") + "/" + String(timeEnd.getMonth() + 1).padStart(2, "0") + "/" + timeEnd.getFullYear() + " " + String(timeEnd.getHours()).padStart(2, "0") + ":" + String(timeEnd.getMinutes()).padStart(2, "0");
+
+	useEffect(() => {
+		const serviceObj = services.find(s => s.ID === service);
+
+		if (serviceObj) {
+			const timeEnd = new Date(timeStart);
+			timeEnd.setMinutes(timeEnd.getMinutes() + serviceObj.estimatedTime);
+			setTimeEnd(timeEnd);
+			setPrice((serviceObj.price / 100).toFixed(2));
+		}
+	}, [service, timeStart]);
 
 	function onSubmitPress() {
 		const appointment = {
@@ -182,26 +193,35 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 
 				{
 					Platform.OS === "ios" ?
-						<View style={commonStyles.iosTimeSection}>
-							<View>
-								<Text style={commonStyles.labelTextStyle}>Time End: </Text>
-							</View>
+						<View>
+							<View style={[commonStyles.iosTimeSection, {marginBottom: 0}]}>
+								<View>
+									<Text style={commonStyles.labelTextStyle}>Time End: </Text>
+								</View>
 
-							<DateTimePicker value={timeEnd} mode="datetime" preferredDatePickerStyle={"compact"} onChange={(event, datetime) => {
-								setTimeEnd(datetime);
-							}}/>
+								<DateTimePicker value={timeEnd} mode="datetime" preferredDatePickerStyle={"compact"} onChange={(event, datetime) => {
+									setTimeEnd(datetime);
+								}}/>
+							</View>
+							<Text style={[commonStyles.warning, {marginBottom: 10, marginTop: 5}]}>Careful: When you change the service and/or the start time, the end time is
+								automatically changed to the start time plus the estimated time of that service.</Text>
 						</View>
 						:
 						<>
 							<Text style={commonStyles.labelTextStyle}>Time End: </Text>
 							<Pressable onPress={onTimeEndPress}>
-								<TextInput pointerEvents={"none"} editable={false} value={timeEndString} style={commonStyles.input}/>
+								<TextInput pointerEvents={"none"} editable={false} value={timeEndString} style={[commonStyles.input, {marginBottom: 5}]}/>
 							</Pressable>
+							<Text style={[commonStyles.warning, {marginBottom: 10}]}>Careful: When you change the
+								service and/or the start time, the end time is automatically changed to the start time
+								plus the estimated time of that service.</Text>
 						</>
 				}
 
 				<Text style={commonStyles.labelTextStyle}>Price:</Text>
-				<TextInput value={price} placeholder={"Price (e.g. 10.00)"} keyboardType={"numeric"} numberOfLines={1} onChangeText={v => setPrice(v)} style={[commonStyles.input]}/>
+				<TextInput value={price} placeholder={"Price (e.g. 10.00)"} keyboardType={"numeric"} numberOfLines={1} onChangeText={v => setPrice(v)} style={[commonStyles.input, {marginBottom: 5}]}/>
+				<Text style={[commonStyles.warning, {marginBottom: 10}]}>Careful: When you change the service, this
+					field is automatically changed to the default price of that service.</Text>
 
 				<Text style={commonStyles.labelTextStyle}>Assigned User:</Text>
 				<SelectDropdown
@@ -224,7 +244,7 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 				/>
 
 				<Text style={commonStyles.labelTextStyle}>Observations: </Text>
-				<TextInput placeholder={"Observations"} defaultValue={observations} placeholderTextColor="#A3A9AA" multiline numberOfLines={2} textAlignVertical={"top"} value={observations} style={commonStyles.input} onChangeText={(value) => setObservations(value)}/>
+				<TextInput placeholder={"Observations"} defaultValue={observations} placeholderTextColor="#A3A9AA" multiline numberOfLines={2} textAlignVertical={"top"} value={observations} style={[commonStyles.input, styles.observations]} onChangeText={(value) => setObservations(value)}/>
 
 				<View>
 					<Button title={data ? "Save" : "Add"} onPress={onSubmitPress}/>
@@ -243,5 +263,9 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 const styles = StyleSheet.create({
 	deleteButton: {
 		marginTop: 10
+	},
+
+	observations: {
+		minHeight: 50
 	}
 });

@@ -2,6 +2,8 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import Home from "../Home";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import HomeStackNavigator from "./HomeStackNavigator";
+import AppointmentAgenda from "../../components/AppointmentAgenda/AppointmentAgenda";
+import Agenda from "../Agenda";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,7 +25,7 @@ export default function ListAgendaTabNavigator() {
 			/>
 			<Tab.Screen
 				name={"Agenda"}
-				component={Home}
+				component={Agenda}
 				options={
 					{
 						title: 'Agenda',

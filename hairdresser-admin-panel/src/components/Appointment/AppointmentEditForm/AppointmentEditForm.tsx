@@ -13,7 +13,7 @@ import Appointment from "../../../types/Appointment.ts";
 
 const AppointmentEditForm: React.FC = () => {
 
-	const {state: {appointment}}: {state: {appointment: Appointment}} = useLocation();
+	const {state: {appointment}}: { state: { appointment: Appointment } } = useLocation();
 
 	const navigate = useNavigate();
 	const [services] = useServices();
@@ -41,7 +41,7 @@ const AppointmentEditForm: React.FC = () => {
 		if (services.length > 0) {
 			setService(services.find(s => s.ID === appointment.serviceID));
 		}
-	}, [appointment.serviceID, services]);
+	}, [services]);
 
 	useEffect(() => {
 		if (clients.length > 0) {
@@ -57,10 +57,14 @@ const AppointmentEditForm: React.FC = () => {
 			endDate.setMinutes(endDate.getMinutes() + service.estimatedTime);
 			setTimeEnd(endDate);
 		}
-	}, [timeStart, service]);
+	}, [timeStart]);
 
 	useEffect(() => {
-		if (service !== undefined) {
+		if (service !== undefined && service.ID !== appointment.serviceID) {
+			appointment.serviceID = -1;
+			const endDate = new Date(timeStart);
+			endDate.setMinutes(endDate.getMinutes() + service.estimatedTime);
+			setTimeEnd(endDate);
 			setPrice(service.price);
 		}
 	}, [service]);
@@ -179,7 +183,7 @@ const AppointmentEditForm: React.FC = () => {
 				</div>
 				<div className={"mb-3"}>
 					<label htmlFor="observations" className="form-label">Observations</label>
-					<textarea value={observations} name="observations" id="observations" rows={3} className={"form-control"} onChange={e => setObservations(e.target.value)} />
+					<textarea value={observations} name="observations" id="observations" rows={3} className={"form-control"} onChange={e => setObservations(e.target.value)}/>
 				</div>
 				<div>
 					<button type={"submit"} className="btn btn-success">Edit</button>
