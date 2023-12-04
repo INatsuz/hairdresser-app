@@ -4,8 +4,6 @@ import {postWithAuth} from "../utils/Requester";
 export default function Add({route: {params}, navigation}) {
 
 	function onSavePress(appointment) {
-		console.log(appointment);
-
 		postWithAuth("api/addAppointment", {
 			service: appointment.serviceID,
 			client: appointment.clientID,

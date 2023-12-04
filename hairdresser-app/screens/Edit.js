@@ -1,11 +1,9 @@
 import AppointmentForm from "../components/AppointmentForm/AppointmentForm";
 import {deleteWithAuth, putWithAuth} from "../utils/Requester";
 
-export default function Edit({route: {params}, navigation}) {
+export default function Edit({route, navigation}) {
 
 	function onSave(appointment) {
-		console.log(appointment);
-
 		putWithAuth("api/editAppointment", {
 			ID: appointment.ID,
 			service: appointment.serviceID,
@@ -29,6 +27,6 @@ export default function Edit({route: {params}, navigation}) {
 	}
 
 	return (
-		<AppointmentForm data={params.data} onSubmit={onSave} onDelete={onDelete}/>
+		<AppointmentForm data={route.params.data} onSubmit={onSave} onDelete={onDelete}/>
 	);
 };

@@ -9,7 +9,6 @@ export default function useLogin() {
 
 	function login(username, password) {
 		post("users/login", {username: username, password: password}).then(res => {
-			console.log(res.data);
 			if (res.data.accessToken && res.data.refreshToken) {
 				saveTokens({accessToken: res.data.accessToken, refreshToken: res.data.refreshToken});
 				dispatch(loginAction(res.data.user));
@@ -25,7 +24,6 @@ export default function useLogin() {
 	function checkLogin() {
 		getTokens().then(({accessToken, refreshToken}) => {
 			getWithAuth("users/checkLogin").then(res => {
-				console.log(res.data);
 				dispatch(loginAction(res.data.user));
 			}).catch(err => {
 				console.log(err);

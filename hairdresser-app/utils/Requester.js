@@ -1,5 +1,8 @@
 import axios from 'axios';
 import {deleteTokens, getTokens, saveTokens} from "./TokenManager";
+import {store} from "../redux/store";
+import {logout as logoffAction} from '../redux/sessionSlice';
+import {navigationRef} from "../App";
 
 export const IP = process.env.EXPO_PUBLIC_API_URL ?? process.env.EXPO_PUBLIC_DEV_API_URL;
 console.log(IP);
@@ -102,7 +105,6 @@ export function postWithAuth(endpoint, data) {
 }
 
 export function post(endpoint, data) {
-	console.log(data);
 	return new Promise(function (resolve, reject) {
 		axios.post(`https://${IP}/${endpoint}`, data, {
 			timeout: 5000

@@ -16,7 +16,7 @@ export default function HomeStackNavigator() {
 			<Stack.Screen
 				name={"Edit"}
 				component={Edit}
-				options={{title: 'Edit Appointment', headerShown: true}}
+				options={{title: 'Edit Appointment', headerShown: true, backBehavior: "history"}}
 			/>
 			<Stack.Screen
 				name={"Add"}

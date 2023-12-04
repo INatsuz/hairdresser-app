@@ -1,4 +1,4 @@
-import {StatusBar, useColorScheme, View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
 import {createNavigationContainerRef, NavigationContainer} from "@react-navigation/native";
@@ -6,7 +6,7 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import LoginTabStackNavigator from "./screens/navigators/LoginTabStackNavigator";
 import commonStyles from "./styles/commonStyles";
 
-const navigationRef = createNavigationContainerRef();
+export const navigationRef = createNavigationContainerRef();
 
 const Tab = createBottomTabNavigator();
 

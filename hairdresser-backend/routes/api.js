@@ -4,7 +4,27 @@ const {mustBeAdmin, mustBeAuthenticated} = require("../utils/authentication");
 const router = express.Router();
 
 router.get('/getAppointments', mustBeAdmin, function (req, res) {
-	console.log(req.cookies);
+	let {startDate, endDate} = req.query;
+
+	let clauses = [];
+	let queryVariables = [];
+
+	let queryFilter = "";
+
+	if (startDate) {
+		clauses.push("appointment.timeStart >= STR_TO_DATE(?, '%Y-%m-%dT%T.000Z')");
+		queryVariables.push(req.query.startDate);
+	}
+
+	if (endDate) {
+		clauses.push("appointment.timeEnd < STR_TO_DATE(?, '%Y-%m-%dT%T.000Z')");
+		queryVariables.push(req.query.endDate);
+	}
+
+	if (clauses.length > 0) {
+		queryFilter = "WHERE " + clauses.join(" AND ");
+	}
+
 	db.query(`	SELECT appointment.*, service.name as serviceName, client.name as clientName, appuser.name as assignedUserName
 					FROM appointment 
 					LEFT JOIN service 
@@ -12,8 +32,10 @@ router.get('/getAppointments', mustBeAdmin, function (req, res) {
 					LEFT JOIN client
 					ON client.ID = appointment.clientID
 					LEFT JOIN appuser
-					ON appuser.ID = appointment.assignedUser`, []).then(({result}) => {
-		console.log(result);
+					ON appuser.ID = appointment.assignedUser
+					${queryFilter}
+					ORDER BY appointment.timeStart ${!startDate && endDate ? "DESC" : "ASC"}
+					`, [...queryVariables]).then(({result}) => {
 		res.json(result);
 	}).catch(err => {
 		console.log(err);
