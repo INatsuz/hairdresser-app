@@ -52,8 +52,10 @@ export default function AppointmentAgenda() {
 				key={reservation.id}
 				style={styles.item}
 				onPress={() => {
-					reservation.timeStart = reservation.timeStart.toISOString();
-					reservation.timeEnd = reservation.timeEnd.toISOString();
+					if (reservation && reservation.timeStart instanceof Date && reservation.timeEnd instanceof Date) {
+						reservation.timeStart = reservation.timeStart.toISOString();
+						reservation.timeEnd = reservation.timeEnd.toISOString();
+					}
 
 					navigation.navigate('Edit', {
 						data: {...reservation}

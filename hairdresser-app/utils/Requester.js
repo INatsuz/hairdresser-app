@@ -2,7 +2,7 @@ import axios from 'axios';
 import {deleteTokens, getTokens, saveTokens} from "./TokenManager";
 import {store} from "../redux/store";
 import {logout as logoffAction} from '../redux/sessionSlice';
-import {navigationRef} from "../App";
+import {navigationRef} from "./NavigationRef";
 
 export const IP = process.env.EXPO_PUBLIC_API_URL ?? process.env.EXPO_PUBLIC_DEV_API_URL;
 console.log(IP);

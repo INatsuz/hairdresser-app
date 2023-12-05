@@ -5,8 +5,7 @@ import {createNavigationContainerRef, NavigationContainer} from "@react-navigati
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import LoginTabStackNavigator from "./screens/navigators/LoginTabStackNavigator";
 import commonStyles from "./styles/commonStyles";
-
-export const navigationRef = createNavigationContainerRef();
+import {navigationRef} from "./utils/NavigationRef";
 
 const Tab = createBottomTabNavigator();
 
