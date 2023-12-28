@@ -1,7 +1,7 @@
 import AppointmentForm from "../components/AppointmentForm/AppointmentForm";
 import {postWithAuth} from "../utils/Requester";
 
-export default function Add({route: {params}, navigation}) {
+export default function AddAppointment({route: {params}, navigation}) {
 
 	function onSavePress(appointment) {
 		postWithAuth("api/addAppointment", {

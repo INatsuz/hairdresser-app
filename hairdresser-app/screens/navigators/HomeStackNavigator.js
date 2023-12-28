@@ -1,7 +1,8 @@
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Home from "../Home";
-import Edit from "../Edit";
-import Add from "../Add";
+import EditAppointment from "../EditAppointment";
+import AddAppointment from "../AddAppointment";
+import AddClient from "../AddClient";
 
 export default function HomeStackNavigator() {
 	const Stack = createNativeStackNavigator();
@@ -14,14 +15,19 @@ export default function HomeStackNavigator() {
 				options={{title: 'Home', headerShown: false}}
 			/>
 			<Stack.Screen
-				name={"Edit"}
-				component={Edit}
-				options={{title: 'Edit Appointment', headerShown: true, backBehavior: "history"}}
+				name={"AddAppointment"}
+				component={AddAppointment}
+				options={{title: 'Add Appointment', headerShown: true}}
 			/>
 			<Stack.Screen
-				name={"Add"}
-				component={Add}
-				options={{title: 'Add Appointment', headerShown: true}}
+				name={"EditAppointment"}
+				component={EditAppointment}
+				options={{title: 'Edit Appointment', headerShown: true}}
+			/>
+			<Stack.Screen
+				name={"AddClient"}
+				component={AddClient}
+				options={{title: 'Add Client', headerShown: true}}
 			/>
 		</Stack.Navigator>
 	)

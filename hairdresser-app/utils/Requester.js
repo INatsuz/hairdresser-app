@@ -29,7 +29,7 @@ export async function logOff() {
 			index: 0,
 			routes: [{name: "Login"}]
 		});
-	});
+	}).catch(err => console.log(err));
 }
 
 export function getWithAuth(endpoint) {
@@ -43,26 +43,32 @@ export function getWithAuth(endpoint) {
 			}).then(res => {
 				resolve(res);
 			}).catch(err => {
-				if (err.response.status === 401) {
-					refreshTokens(refreshToken).then(({newAccessToken}) => {
-						axios.get(`https://${IP}/${endpoint}`, {
-							headers: {
-								Authorization: `Bearer ${newAccessToken}`
-							},
-							timeout: 5000
-						}).then(res => {
-							if (res.status === 200) {
-								resolve(res);
-							}
+				if (err.response) {
+					if (err.response.status === 401) {
+						refreshTokens(refreshToken).then(({newAccessToken}) => {
+							axios.get(`https://${IP}/${endpoint}`, {
+								headers: {
+									Authorization: `Bearer ${newAccessToken}`
+								},
+								timeout: 5000
+							}).then(res => {
+								if (res.status === 200) {
+									resolve(res);
+								}
+							}).catch(err => {
+								console.log(err);
+							});
+						}).catch(err => {
+							logOff().then(r => reject(err)).catch(e => console.log(err));
 						});
-					}).catch(err => {
-						logOff().then(r => reject(err));
-					});
-				} else {
-					console.log(err);
-					reject(err);
+					} else {
+						console.log(err);
+						reject(err);
+					}
 				}
 			});
+		}).catch(err => {
+			console.log(err);
 		});
 	});
 }
@@ -91,6 +97,8 @@ export function postWithAuth(endpoint, data) {
 							if (res.status === 200) {
 								resolve(res);
 							}
+						}).catch(err => {
+							console.log(err);
 						});
 					}).catch(err => {
 						logOff().then(r => reject(err));
@@ -142,6 +150,8 @@ export function putWithAuth(endpoint, data) {
 							if (res.status === 200) {
 								resolve(res);
 							}
+						}).catch(err => {
+							console.log(err);
 						});
 					}).catch(err => {
 						logOff().then(r => reject(err));
@@ -176,6 +186,8 @@ export function deleteWithAuth(endpoint) {
 							timeout: 5000
 						}).then(res => {
 							resolve(res);
+						}).catch(err => {
+							console.log(err);
 						});
 					}).catch(err => {
 						store.dispatch(logoffAction());

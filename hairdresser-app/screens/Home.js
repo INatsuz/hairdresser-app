@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet} from "react-native";
+import {SafeAreaView, StyleSheet, View} from "react-native";
 import commonStyles from "../styles/commonStyles";
 import {deleteTokens} from "../utils/TokenManager";
 import {useDispatch} from "react-redux";
@@ -24,14 +24,16 @@ export default function Home({navigation}) {
 	}
 
 	function navigateToEdit(data) {
-		navigation.navigate('Edit', {data: data});
+		navigation.navigate('EditAppointment', {data: data});
 	}
 
 	return (
 		<SafeAreaView style={[styles.container, commonStyles.topPaddingContainer, commonStyles.relativeContainer, commonStyles.flex1Container]}>
 			<UserSection onLogoutPress={handleLogoutPress}/>
 			<AppointmentList appointments={appointments} fetchAppointments={fetchAppointments} onItemPress={navigateToEdit}/>
-			<PlusCircle/>
+			<View style={styles.plusContainer}>
+				<PlusCircle/>
+			</View>
 		</SafeAreaView>
 	)
 };
@@ -39,5 +41,11 @@ export default function Home({navigation}) {
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: "white"
+	},
+
+	plusContainer: {
+		position: "absolute",
+		bottom: 10,
+		right: 10
 	}
 });

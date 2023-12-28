@@ -1,22 +1,28 @@
-import {TouchableOpacity, StyleSheet} from "react-native";
+import {TouchableOpacity, StyleSheet, View} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useNavigation} from "@react-navigation/native";
+import {Menu, MenuOption, MenuOptions, MenuTrigger} from "react-native-popup-menu";
 
 export default function PlusCircle() {
 	const navigation = useNavigation();
 
 	return (
-		<TouchableOpacity style={styles.plusContainer} onPress={() => navigation.navigate("Add")}>
-			<Ionicons name="add" size={22} color={"#000"}/>
-		</TouchableOpacity>
+		<Menu>
+			<MenuTrigger>
+				<View style={styles.plusContainer}>
+					<Ionicons name="add" size={22} color={"#000"}/>
+				</View>
+			</MenuTrigger>
+			<MenuOptions>
+				<MenuOption customStyles={{optionText: styles.menuOption}} onSelect={() => navigation.navigate("AddAppointment")} text="Appointment"/>
+				<MenuOption customStyles={{optionText: styles.menuOption}} onSelect={() => navigation.navigate("AddClient")} text="Client"/>
+			</MenuOptions>
+		</Menu>
 	);
 };
 
 const styles = StyleSheet.create({
 	plusContainer: {
-		position: "absolute",
-		bottom: 10,
-		right: 10,
 		height: 50,
 		width: 50,
 		justifyContent: "center",
@@ -26,5 +32,9 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderRadius: 25,
 		zIndex: 10
+	},
+
+	menuOption: {
+		fontSize: 20
 	}
 });

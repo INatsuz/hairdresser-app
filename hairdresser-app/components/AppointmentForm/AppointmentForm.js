@@ -109,7 +109,8 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 					setPickingStartDate(false);
 					setTimeStart(newDate);
 					setPickingStartTime(true);
-				}}/>}
+				}}/>
+			}
 			{pickingStartTime && Platform.OS === "android" &&
 				<DateTimePicker value={timeStart} mode="time" onChange={(event, time) => {
 					const newTime = timeStart;

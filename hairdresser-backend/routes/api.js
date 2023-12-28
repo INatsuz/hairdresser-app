@@ -100,7 +100,7 @@ router.get('/getClients', mustBeAdmin, function (req, res) {
 });
 
 router.post('/addClient', mustBeAdmin, function (req, res) {
-	db.query("INSERT INTO client(name, phone, email, birthday, nif, observations) VALUES(?, ?, ?, ?, ?, ?)", [req.body.name, req.body.phone, req.body.email, req.body.birthday, req.body.nif, req.body.observations]).then(() => {
+	db.query("INSERT INTO client(name, phone, email, birthday, nif, address, observations) VALUES(?, ?, ?, ?, ?, ?, ?)", [req.body.name, req.body.phone, req.body.email, req.body.birthday, req.body.nif, req.body.address, req.body.observations]).then(() => {
 		res.status(200).send("Added new client successfully");
 		console.log("Added new client successfully");
 	}).catch(err => {

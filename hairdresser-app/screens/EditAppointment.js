@@ -1,7 +1,7 @@
 import AppointmentForm from "../components/AppointmentForm/AppointmentForm";
 import {deleteWithAuth, putWithAuth} from "../utils/Requester";
 
-export default function Edit({route, navigation}) {
+export default function EditAppointment({route, navigation}) {
 
 	function onSave(appointment) {
 		putWithAuth("api/editAppointment", {

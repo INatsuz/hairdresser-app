@@ -1,11 +1,9 @@
-import {View, Text, StyleSheet, Alert} from "react-native";
-import {useDispatch, useSelector} from "react-redux";
+import {Alert, StyleSheet, Text, View} from "react-native";
+import {useSelector} from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import {deleteTokens} from "../../utils/TokenManager";
 
 export default function UserSection(props) {
 	const username = useSelector(state => state.session.user.name);
-	const dispatch = useDispatch();
 
 	const confirmLogoutDialog = () => {
 		Alert.alert(
