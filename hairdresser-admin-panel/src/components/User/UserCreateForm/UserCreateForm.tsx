@@ -61,23 +61,23 @@ const UserCreateForm: React.FC = () => {
 					{
 						username.trim() === "" &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							This field cannot be left empty.
+							Este campo não pode ser deixado vazio.
 						</div>
 					}
 					{
 						username.trim().length > 0 && username.trim().length < 4 &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							Username must be at least 4 characters long.
+							Username tem de ter um mínimo de 4 caracteres.
 						</div>
 					}
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="name" className="form-label">Name</label>
+					<label htmlFor="name" className="form-label">Nome</label>
 					<input type="text" id={"name"} value={name} name={"name"} className={"form-control"} onChange={e => setName(e.target.value)}/>
 					{
 						name.trim() === "" &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							This field cannot be left empty.
+							Este campo não pode ser deixado vazio.
 						</div>
 					}
 				</div>
@@ -92,28 +92,28 @@ const UserCreateForm: React.FC = () => {
 					{
 						password.trim().length === 0 &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							The password cannot be left empty.
+							A password não pode ser deixada vazia.
 						</div>
 					}
 					{
 						password.trim().length > 0 && password.trim().length < 6 &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							The password must be at least 6 characters long.
+							A password tem de ter um mínimo de 6 caracteres.
 						</div>
 					}
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+					<label htmlFor="confirmPassword" className="form-label">Confirmar Password</label>
 					<input type="password" id={"confirmPassword"} value={confirmPassword} name={"confirmPassword"} className={"form-control"} onChange={e => setConfirmPassword(e.target.value)}/>
 					{
 						confirmPassword !== password &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							The passwords don't match.
+							As passwords não são iguais.
 						</div>
 					}
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="userType" className="form-label">User Type</label>
+					<label htmlFor="userType" className="form-label">Tipo de Utilizador</label>
 					<select value={userType} name="userType" id="userType" className={"form-select"} onChange={e => setUserType(e.target.value as UserType)}>
 						{
 							USER_TYPES.map(value =>
@@ -122,7 +122,7 @@ const UserCreateForm: React.FC = () => {
 					</select>
 				</div>
 				<div>
-					<button type={"submit"} className="btn btn-success">Create</button>
+					<button type={"submit"} className="btn btn-success">Criar</button>
 				</div>
 			</form>
 		</>

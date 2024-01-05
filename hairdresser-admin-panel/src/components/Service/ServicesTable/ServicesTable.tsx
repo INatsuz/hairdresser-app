@@ -23,10 +23,10 @@ const ServicesTable: React.FC<ServicesTableProps> = ({services, setServices}) =>
 				<thead>
 					<tr>
 						<th>ID</th>
-						<th>Name</th>
-						<th>Price</th>
-						<th>Estimated Time</th>
-						<th>Color</th>
+						<th>Nome</th>
+						<th>Preço</th>
+						<th>Tempo Estimado</th>
+						<th>Cor</th>
 						<th></th>
 					</tr>
 				</thead>

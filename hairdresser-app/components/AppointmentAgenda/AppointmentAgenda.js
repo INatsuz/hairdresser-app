@@ -57,7 +57,7 @@ export default function AppointmentAgenda() {
 						reservation.timeEnd = reservation.timeEnd.toISOString();
 					}
 
-					navigation.navigate('Edit', {
+					navigation.navigate('EditAppointment', {
 						data: {...reservation}
 					});
 				}}
@@ -75,7 +75,7 @@ export default function AppointmentAgenda() {
 	};
 
 	const renderEmptyData = () => {
-		return <Text style={{fontSize: 16, textAlign: "center", padding: 15}}>Nothing here</Text>
+		return <Text style={{fontSize: 16, textAlign: "center", padding: 15}}>Nada aqui</Text>
 	}
 
 	return (

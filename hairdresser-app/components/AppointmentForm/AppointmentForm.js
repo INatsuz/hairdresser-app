@@ -44,6 +44,10 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 	useEffect(() => {
 		const serviceObj = services.find(s => s.ID === service);
 
+		if (data) {
+			if(service === data.serviceID && timeStart.getTime() === new Date(data.timeStart).getTime()) {}return;
+		}
+
 		if (serviceObj) {
 			const timeEnd = new Date(timeStart);
 			timeEnd.setMinutes(timeEnd.getMinutes() + serviceObj.estimatedTime);
@@ -69,16 +73,16 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 
 	function onDeletePress() {
 		Alert.alert(
-			"Confirm",
-			"Are you sure you want delete this appointment?",
+			"Confirmar",
+			"Tem a certeza que quer eliminar esta marcação?",
 			[
 				{
-					text: "Yes",
+					text: "Sim",
 					onPress: () => {
 						onDelete(data.ID);
 					}
 				}, {
-				text: "Cancel",
+				text: "Cancelar",
 				style: "cancel"
 			}
 			]
@@ -98,7 +102,7 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 	}
 
 	return (
-		<KeyboardAvoidingView style={commonStyles.formContainer}>
+		<KeyboardAvoidingView style={commonStyles.formContainer} behavior={Platform.OS === 'ios' ? 'padding' : ''} keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}>
 			{pickingStartDate && Platform.OS === "android" &&
 				<DateTimePicker value={timeStart} mode="date" onChange={(event, date) => {
 					const newDate = timeStart;
@@ -140,7 +144,7 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 					setTimeEnd(time);
 				}}/>}
 			<ScrollView style={commonStyles.flex1Container}>
-				<Text style={commonStyles.labelTextStyle}>Service:</Text>
+				<Text style={commonStyles.labelTextStyle}>Serviço:</Text>
 				<SelectDropdown
 					data={services.map(service => service.name)}
 					defaultValue={services.find(s => s.ID === service)?.name}
@@ -150,13 +154,14 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 					renderDropdownIcon={isOpened => {
 						return <Ionicons name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18}/>;
 					}}
+					defaultButtonText={"Seleciona um serviço."}
 					search
 					buttonStyle={[commonStyles.searchDropdownStyle]}
 					buttonTextStyle={commonStyles.searchDropdownTextStyle}
 					statusBarTranslucent={true}
 				/>
 
-				<Text style={commonStyles.labelTextStyle}>Client:</Text>
+				<Text style={commonStyles.labelTextStyle}>Cliente:</Text>
 				<SelectDropdown
 					data={clients.map(client => client.name)}
 					defaultValue={clients.find(c => c.ID === client)?.name}
@@ -166,6 +171,7 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 					renderDropdownIcon={isOpened => {
 						return <Ionicons name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18}/>;
 					}}
+					defaultButtonText={"Seleciona um cliente."}
 					search
 					buttonStyle={[commonStyles.searchDropdownStyle]}
 					buttonTextStyle={commonStyles.searchDropdownTextStyle}
@@ -176,7 +182,7 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 					Platform.OS === "ios" ?
 						<View style={commonStyles.iosTimeSection}>
 							<View>
-								<Text style={commonStyles.labelTextStyle}>Time Start: </Text>
+								<Text style={commonStyles.labelTextStyle}>Data/Hora Inicio: </Text>
 							</View>
 
 							<DateTimePicker value={timeStart} mode="datetime" preferredDatePickerStyle={"compact"} onChange={(event, datetime) => {
@@ -185,7 +191,7 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 						</View>
 						:
 						<>
-							<Text style={commonStyles.labelTextStyle}>Time Start: </Text>
+							<Text style={commonStyles.labelTextStyle}>Data/Hora Inicio: </Text>
 							<Pressable onPress={onTimeStartPress}>
 								<TextInput pointerEvents={"none"} editable={false} value={timeStartString} style={commonStyles.input}/>
 							</Pressable>
@@ -197,39 +203,43 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 						<View>
 							<View style={[commonStyles.iosTimeSection, {marginBottom: 0}]}>
 								<View>
-									<Text style={commonStyles.labelTextStyle}>Time End: </Text>
+									<Text style={commonStyles.labelTextStyle}>Data/Hora Fim: </Text>
 								</View>
 
-								<DateTimePicker value={timeEnd} mode="datetime" preferredDatePickerStyle={"compact"} onChange={(event, datetime) => {
+								<DateTimePicker value={timeEnd} mode="datetime" display={"default"} preferredDatePickerStyle={"compact"} onChange={(event, datetime) => {
 									setTimeEnd(datetime);
 								}}/>
 							</View>
-							<Text style={[commonStyles.warning, {marginBottom: 10, marginTop: 5}]}>Careful: When you change the service and/or the start time, the end time is
-								automatically changed to the start time plus the estimated time of that service.</Text>
+							<Text style={[commonStyles.warning, {marginBottom: 10, marginTop: 5}]}>
+								Atenção: Ao alterar o serviço escolhido ou a hora inicial, a hora final é
+								automaticamente preenchida com a hora inicial mais o tempo estimado do serviço.
+							</Text>
 						</View>
 						:
 						<>
-							<Text style={commonStyles.labelTextStyle}>Time End: </Text>
+							<Text style={commonStyles.labelTextStyle}>Data/Hora Fim: </Text>
 							<Pressable onPress={onTimeEndPress}>
 								<TextInput pointerEvents={"none"} editable={false} value={timeEndString} style={[commonStyles.input, {marginBottom: 5}]}/>
 							</Pressable>
-							<Text style={[commonStyles.warning, {marginBottom: 10}]}>Careful: When you change the
-								service and/or the start time, the end time is automatically changed to the start time
-								plus the estimated time of that service.</Text>
+							<Text style={[commonStyles.warning, {marginBottom: 10}]}>
+								Atenção: Ao alterar o serviço escolhido ou a hora inicial, a hora final é
+								automaticamente preenchida com a hora inicial mais o tempo estimado do serviço.
+							</Text>
 						</>
 				}
 
-				<Text style={commonStyles.labelTextStyle}>Price:</Text>
-				<TextInput value={price} placeholder={"Price (e.g. 10.00)"} keyboardType={"numeric"} numberOfLines={1} onChangeText={v => setPrice(v)} style={[commonStyles.input, {marginBottom: 5}]}/>
-				<Text style={[commonStyles.warning, {marginBottom: 10}]}>Careful: When you change the service, this
-					field is automatically changed to the default price of that service.</Text>
+				<Text style={commonStyles.labelTextStyle}>Preço:</Text>
+				<TextInput value={price} placeholder={"Preço (e.g. 10.00)"} keyboardType={"numeric"} numberOfLines={1} onChangeText={v => setPrice(v)} style={[commonStyles.input, {marginBottom: 5}]}/>
+				<Text style={[commonStyles.warning, {marginBottom: 10}]}>
+					Atenção: Ao alterar o serviço, o preço é automaticamente preenchido com o preço do serviço.
+				</Text>
 
-				<Text style={commonStyles.labelTextStyle}>Assigned User:</Text>
+				<Text style={commonStyles.labelTextStyle}>Fisioterapeuta:</Text>
 				<SelectDropdown
-					data={["None", ...users.map(user => user.name)]}
-					defaultValue={users.find(u => u.ID === assignedUser) ? users.find(u => u.ID === assignedUser).name : "None"}
+					data={["Nenhum", ...users.map(user => user.name)]}
+					defaultValue={users.find(u => u.ID === assignedUser) ? users.find(u => u.ID === assignedUser).name : "Nenhum"}
 					onSelect={selectedItem => {
-						if (selectedItem === "None") {
+						if (selectedItem === "Nenhum") {
 							setAssignedUser(null);
 						} else {
 							setAssignedUser(users.find(u => u.name === selectedItem).ID);
@@ -244,16 +254,16 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 					statusBarTranslucent={true}
 				/>
 
-				<Text style={commonStyles.labelTextStyle}>Observations: </Text>
-				<TextInput placeholder={"Observations"} defaultValue={observations} placeholderTextColor="#A3A9AA" multiline numberOfLines={2} textAlignVertical={"top"} value={observations} style={[commonStyles.input, styles.observations]} onChangeText={(value) => setObservations(value)}/>
+				<Text style={commonStyles.labelTextStyle}>Observações: </Text>
+				<TextInput placeholder={"Observações"} defaultValue={observations} placeholderTextColor="#A3A9AA" multiline numberOfLines={2} textAlignVertical={"top"} value={observations} style={[commonStyles.input, styles.observations]} onChangeText={(value) => setObservations(value)}/>
 
 				<View>
-					<Button title={data ? "Save" : "Add"} onPress={onSubmitPress}/>
+					<Button title={data ? "Guardar" : "Criar"} onPress={onSubmitPress}/>
 				</View>
 				<View style={styles.deleteButton}>
 					{
 						data &&
-						<Button title={"Delete"} color={"red"} onPress={onDeletePress}/>
+						<Button title={"Eliminar"} color={"red"} onPress={onDeletePress}/>
 					}
 				</View>
 			</ScrollView>

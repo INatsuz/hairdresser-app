@@ -10,7 +10,7 @@ const CreateAppointment: React.FC = () => {
 			<Navbar/>
 			<AuthRequired>
 				<div className={"container py-4"}>
-					<h4>Create New Appointment</h4>
+					<h4>Nova Marcação</h4>
 					<AppointmentCreateForm/>
 				</div>
 			</AuthRequired>

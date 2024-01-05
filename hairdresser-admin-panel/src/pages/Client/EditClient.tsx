@@ -10,7 +10,7 @@ const EditClient: React.FC = () => {
 			<Navbar/>
 			<AuthRequired>
 				<div className={"container py-4"}>
-					<h4>Edit Client</h4>
+					<h4>Editar Cliente</h4>
 					<ClientEditForm/>
 				</div>
 			</AuthRequired>

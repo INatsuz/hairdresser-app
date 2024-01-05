@@ -61,22 +61,22 @@ const ClientEditForm: React.FC = () => {
 		<>
 			<form className={"bg-light rounded p-3 shadow"} onSubmit={handleSubmit}>
 				<div className={"mb-3"}>
-					<label htmlFor="name" className="form-label">Name</label>
+					<label htmlFor="name" className="form-label">Nome</label>
 					<input type="text" id={"name"} value={name} name={"name"} className={"form-control"} onChange={e => setName(e.target.value)}/>
 					{
 						name.trim() === "" &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							This field cannot be left empty.
+							Este campo não pode ser deixado vazio.
 						</div>
 					}
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="phone" className="form-label">Phone</label>
+					<label htmlFor="phone" className="form-label">Telemóvel</label>
 					<input type="text" id={"phone"} value={phone} name={"phone"} className={"form-control"} onChange={e => setPhone(e.target.value)}/>
 					{
 						phone.trim() !== "" && phone.replace(/ /g, "").match(phoneRegex) === null &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							The phone number you inserted is invalid.
+							O número de telemóvel inserido não é válido.
 						</div>
 					}
 				</div>
@@ -85,7 +85,7 @@ const ClientEditForm: React.FC = () => {
 					<input type="email" id={"email"} value={email} name={"email"} className={"form-control"} onChange={e => setEmail(e.target.value)}/>
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="birthday" className="form-label">Birthday</label>
+					<label htmlFor="birthday" className="form-label">Data de Nascimento</label>
 					<input type="date" id={"birthday"} value={birthdayString} name={"birthday"} className={"form-control"} onChange={handleSetBirthday}/>
 				</div>
 				<div className={"mb-3"}>
@@ -93,11 +93,11 @@ const ClientEditForm: React.FC = () => {
 					<input type="text" id={"nif"} value={nif} name={"nif"} className={"form-control"} onChange={e => setNif(e.target.value)}/>
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="observations" className="form-label">Observations</label>
+					<label htmlFor="observations" className="form-label">Observações</label>
 					<textarea value={observations} name="observations" id="observations" rows={3} className={"form-control"} onChange={e => setObservations(e.target.value)} />
 				</div>
 				<div>
-					<button type={"submit"} className="btn btn-success">Edit</button>
+					<button type={"submit"} className="btn btn-success">Editar</button>
 				</div>
 			</form>
 		</>

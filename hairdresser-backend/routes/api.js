@@ -25,7 +25,7 @@ router.get('/getAppointments', mustBeAdmin, function (req, res) {
 		queryFilter = "WHERE " + clauses.join(" AND ");
 	}
 
-	db.query(`	SELECT appointment.*, service.name as serviceName, client.name as clientName, appuser.name as assignedUserName
+	db.query(`SELECT appointment.*, service.name as serviceName, client.name as clientName, appuser.name as assignedUserName
 					FROM appointment 
 					LEFT JOIN service 
 					ON service.ID = appointment.serviceID
@@ -100,6 +100,8 @@ router.get('/getClients', mustBeAdmin, function (req, res) {
 });
 
 router.post('/addClient', mustBeAdmin, function (req, res) {
+	req.body.phone = req.body.phone.replace(/ /g, "");
+
 	db.query("INSERT INTO client(name, phone, email, birthday, nif, address, observations) VALUES(?, ?, ?, ?, ?, ?, ?)", [req.body.name, req.body.phone, req.body.email, req.body.birthday, req.body.nif, req.body.address, req.body.observations]).then(() => {
 		res.status(200).send("Added new client successfully");
 		console.log("Added new client successfully");
@@ -111,6 +113,8 @@ router.post('/addClient', mustBeAdmin, function (req, res) {
 });
 
 router.put("/editClient", mustBeAdmin, function (req, res) {
+	req.body.phone = req.body.phone.replace(/ /g, "");
+
 	db.query("UPDATE client SET name = ?, phone = ?, email = ?, birthday = ?, nif = ?, observations = ? WHERE ID = ?", [req.body.name, req.body.phone, req.body.email, req.body.birthday, req.body.nif, req.body.observations, req.body.ID]).then(() => {
 		res.status(200).send("Edited client successfully");
 		console.log("Edited client successfully");

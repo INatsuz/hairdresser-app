@@ -23,8 +23,8 @@ const ClientsTable: React.FC<ClientsTableProps> = ({clients, setClients}) => {
 				<thead>
 					<tr>
 						<th>ID</th>
-						<th>Name</th>
-						<th>Phone</th>
+						<th>Nome</th>
+						<th>Telemóvel</th>
 						<th></th>
 					</tr>
 				</thead>

@@ -1,4 +1,4 @@
-import {TouchableOpacity, StyleSheet, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useNavigation} from "@react-navigation/native";
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from "react-native-popup-menu";
@@ -14,8 +14,8 @@ export default function PlusCircle() {
 				</View>
 			</MenuTrigger>
 			<MenuOptions>
-				<MenuOption customStyles={{optionText: styles.menuOption}} onSelect={() => navigation.navigate("AddAppointment")} text="Appointment"/>
-				<MenuOption customStyles={{optionText: styles.menuOption}} onSelect={() => navigation.navigate("AddClient")} text="Client"/>
+				<MenuOption customStyles={{optionText: styles.menuOption}} onSelect={() => navigation.navigate("AddAppointment")} text="Marcação"/>
+				<MenuOption customStyles={{optionText: styles.menuOption}} onSelect={() => navigation.navigate("AddClient")} text="Cliente"/>
 			</MenuOptions>
 		</Menu>
 	);

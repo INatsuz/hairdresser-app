@@ -98,7 +98,7 @@ const AppointmentCreateForm: React.FC = () => {
 		<>
 			<form className={"bg-light rounded p-3 shadow"} onSubmit={handleSubmit}>
 				<div className={"mb-3"}>
-					<label htmlFor="service" className="form-label">Service</label>
+					<label htmlFor="service" className="form-label">Serviço</label>
 					<select name="service" id={"service"} value={service?.ID} className={"form-select"} onChange={e => setService(services.find(v => v.ID === parseInt(e.target.value)))}>
 						{
 							services.map(service => <option value={service.ID} key={service.ID}>{service.name}</option>)
@@ -106,7 +106,7 @@ const AppointmentCreateForm: React.FC = () => {
 					</select>
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="client" className="form-label">Client</label>
+					<label htmlFor="client" className="form-label">Cliente</label>
 					<Combobox value={clientComboText} data={clients} textField={"name"} dataKey={"ID"} hideEmptyPopup={false} filter={(c, searchTerm) => {
 						return `${c.name} ${c.phone}`.toLowerCase().includes(searchTerm.toLowerCase());
 					}} onChange={value => {
@@ -122,57 +122,56 @@ const AppointmentCreateForm: React.FC = () => {
 					{
 						clientComboText === "" &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							This field cannot be left empty.
+							Este campo não pode ser deixado vazio.
 						</div>
 					}
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="timeStart" className="form-label">Date/Time Start</label>
+					<label htmlFor="timeStart" className="form-label">Data/Hora de Início</label>
 					<input type="datetime-local" id={"timeStart"} value={dateToDatetimeString(timeStart)} name={"timeStart"} className={"form-control"} onChange={handleSetTimeStart}/>
 					{
 						isNaN(timeStart.getTime()) &&
 						<div className="alert alert-danger p-2 mt-2" role={"alert"}>
-							This field cannot be left empty.
+							Este campo não pode ser deixado vazio.
 						</div>
 					}
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="timeEnd" className="form-label">Date/Time End</label>
+					<label htmlFor="timeEnd" className="form-label">Data/Hora de Fim</label>
 					<input type="datetime-local" id={"timeEnd"} value={dateToDatetimeString(timeEnd)} name={"timeEnd"} className={"form-control"} onChange={e => setTimeEnd(new Date(e.target.value))}/>
 					{
 						isNaN(timeStart.getTime()) &&
 						<div className="alert alert-danger p-2 mt-2 mb-0" role={"alert"}>
-							This field cannot be left empty.
+							Este campo não pode ser deixado vazio.
 						</div>
 					}
 					<div className="alert alert-warning p-2 mt-2" role={"alert"}>
-						Careful: When you change the service and/or the start time, the end time is automatically
-						changed to the start time plus the estimated time of that service.
+						Atenção: Ao alterar o serviço escolhido ou a hora inicial, a hora final é
+						automaticamente preenchida com a hora inicial mais o tempo estimado do serviço.
 					</div>
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="price" className="form-label">Price</label>
+					<label htmlFor="price" className="form-label">Preço</label>
 					<input type="number" min={0} step={0.01} id={"price"} value={isNaN(price) ? "" : (price / 100)} name={"price"} className={"form-control"} onChange={e => setPrice(parseFloat(e.target.value) * 100)}/>
 					<div className="alert alert-warning p-2 mt-2" role={"alert"}>
-						Careful: When you change the service, this field is automatically changed to the default price
-						of that service.
+						Atenção: Ao alterar o serviço, o preço é automaticamente preenchido com o preço do serviço.
 					</div>
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="assignedUser" className="form-label">Assigned User</label>
+					<label htmlFor="assignedUser" className="form-label">Fisioterapeuta</label>
 					<select name="assignedUser" id={"assignedUser"} value={user?.ID} className={"form-select"} onChange={e => setUser(users.find(v => v.ID === parseInt(e.target.value)))}>
-						<option value="null">No Assigned User</option>
+						<option value="null">Nenhum</option>
 						{
 							users.map(user => <option value={user.ID} key={user.ID}>{user.name}</option>)
 						}
 					</select>
 				</div>
 				<div className={"mb-3"}>
-					<label htmlFor="observations" className="form-label">Observations</label>
+					<label htmlFor="observations" className="form-label">Observações</label>
 					<textarea value={observations} name="observations" id="observations" rows={3} className={"form-control"} onChange={e => setObservations(e.target.value)} />
 				</div>
 				<div>
-					<button type={"submit"} className="btn btn-success">Create</button>
+					<button type={"submit"} className="btn btn-success">Criar</button>
 				</div>
 			</form>
 		</>

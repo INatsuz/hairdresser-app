@@ -12,7 +12,7 @@ const AppointmentsTableRow: React.FC<AppointmentsTableRowProps> = ({appointment,
 	const navigate = useNavigate();
 
 	function handleDeleteClick() {
-		if (confirm("Are you sure?")) {
+		if (confirm("Tem a certeza que quer eliminar esta marcação?")) {
 			deleteAppointment(appointment);
 		}
 	}
@@ -28,7 +28,6 @@ const AppointmentsTableRow: React.FC<AppointmentsTableRowProps> = ({appointment,
 	return (
 		<>
 			<tr>
-				<td>{appointment.ID}</td>
 				<td>{appointment.serviceName}</td>
 				<td>{appointment.clientName}</td>
 				<td>{appointment.assignedUserName}</td>

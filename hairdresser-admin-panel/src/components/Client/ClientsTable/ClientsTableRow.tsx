@@ -11,7 +11,7 @@ const ClientsTableRow: React.FC<ClientsTableRowProps> = ({client, deleteClient})
 	const navigate = useNavigate();
 
 	function handleDeleteClick() {
-		if (confirm("Are you sure?")) {
+		if (confirm("Tem a certeza que quer eliminar este cliente?")) {
 			deleteClient(client);
 		}
 	}

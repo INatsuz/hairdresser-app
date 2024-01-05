@@ -7,17 +7,17 @@ export default function UserSection(props) {
 
 	const confirmLogoutDialog = () => {
 		Alert.alert(
-			"Confirm",
-			"Are you sure you want to log out?",
+			"Confirmar",
+			"Tem a certeza que quer fazer logout?",
 			[
 				{
-					text: "Yes",
+					text: "Sim",
 					onPress: async () => {
 						props.onLogoutPress();
 					}
 				},
 				{
-					text: "Cancel",
+					text: "Cancelar",
 					style: "cancel"
 				}
 			]
@@ -26,7 +26,7 @@ export default function UserSection(props) {
 
 	return (
 		<View style={[styles.area]}>
-			<Text style={styles.nameText}>Hairdresser: {username}</Text>
+			<Text style={styles.nameText}>Utilizador: {username}</Text>
 			<Ionicons name="log-out" size={22} color={styles.nameText.color} onPress={confirmLogoutDialog}/>
 		</View>
 	);

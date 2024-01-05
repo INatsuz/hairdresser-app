@@ -22,13 +22,12 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({appointments, setA
 			<table className={"table table-striped table-hover"} data-testid={"appointments-table"}>
 				<thead>
 					<tr>
-						<th>ID</th>
-						<th>Service</th>
-						<th>Client</th>
-						<th>Assigned User</th>
-						<th>Price</th>
-						<th>Time Start</th>
-						<th>Time End</th>
+						<th>Serviço</th>
+						<th>Cliente</th>
+						<th>Fisioterapeuta</th>
+						<th>Preço</th>
+						<th>Data e Hora de Início</th>
+						<th>Data/Hora de Fim</th>
 						<th></th>
 					</tr>
 				</thead>

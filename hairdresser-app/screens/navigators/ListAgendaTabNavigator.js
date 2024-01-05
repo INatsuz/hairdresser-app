@@ -15,7 +15,7 @@ export default function ListAgendaTabNavigator() {
 				component={HomeStackNavigator}
 				options={
 					{
-						title: 'Home',
+						title: 'Marcações',
 						headerShown: false,
 						tabBarIcon: ({color, size}) => (
 							<Ionicons name="home" size={size} color={color}/>

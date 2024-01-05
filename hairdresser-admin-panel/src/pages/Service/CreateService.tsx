@@ -10,7 +10,7 @@ const CreateService: React.FC = () => {
 			<Navbar/>
 			<AuthRequired>
 				<div className={"container py-4"}>
-					<h4>Create New Service</h4>
+					<h4>Novo Serviço</h4>
 					<ServiceCreateForm/>
 				</div>
 			</AuthRequired>

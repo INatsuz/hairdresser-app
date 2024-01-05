@@ -10,7 +10,7 @@ const CreateClient: React.FC = () => {
 			<Navbar/>
 			<AuthRequired>
 				<div className={"container py-4"}>
-					<h4>Create New Client</h4>
+					<h4>Novo Cliente</h4>
 					<ClientCreateForm/>
 				</div>
 			</AuthRequired>

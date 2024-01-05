@@ -15,7 +15,7 @@ const Clients: React.FC = () => {
 			<AuthRequired>
 				<div className={"container py-4"}>
 					<Link to={"create"}>
-						<button className={"btn btn-success mb-2"}><i className="bi-plus-lg"></i> Create</button>
+						<button className={"btn btn-success mb-2"}><i className="bi-plus-lg"></i> Novo</button>
 					</Link>
 					<ClientsTable clients={clients} setClients={setClients}/>
 				</div>

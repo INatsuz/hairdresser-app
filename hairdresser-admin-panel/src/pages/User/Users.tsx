@@ -15,7 +15,7 @@ const Users: React.FC = () => {
 			<AuthRequired>
 				<div className="container py-4">
 					<Link to={"create"}>
-						<button className={"btn btn-success mb-2"}><i className="bi-plus-lg"></i> Create</button>
+						<button className={"btn btn-success mb-2"}><i className="bi-plus-lg"></i> Novo</button>
 					</Link>
 					<UsersTable users={users} setUsers={setUsers}/>
 				</div>

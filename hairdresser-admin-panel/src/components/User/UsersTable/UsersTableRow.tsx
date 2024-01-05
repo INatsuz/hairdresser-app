@@ -8,7 +8,7 @@ interface UsersTableRowProps {
 
 const UsersTableRow: React.FC<UsersTableRowProps> = ({user, deleteUser}) => {
 	function handleDeleteClick() {
-		if (confirm("Are you sure?")) {
+		if (confirm("Tem a certeza que quer eliminar este utilizador?")) {
 			deleteUser(user);
 		}
 	}

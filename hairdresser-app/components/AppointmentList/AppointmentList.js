@@ -23,7 +23,7 @@ export default function AppointmentList(props) {
 		<SafeAreaView style={styles.container}>
 
 			<View style={styles.titleContainer}>
-				<Text style={styles.title}>{!props.title ? "Your Appointments:" : props.title}</Text>
+				<Text style={styles.title}>{!props.title ? "Marcações:" : props.title}</Text>
 			</View>
 			<FlatList
 				data={props.appointments}

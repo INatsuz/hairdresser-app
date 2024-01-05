@@ -10,7 +10,7 @@ const CreateUser: React.FC = () => {
 			<Navbar/>
 			<AuthRequired>
 				<div className={"container py-4"}>
-					<h4>Create New User</h4>
+					<h4>Novo Utilizador</h4>
 					<UserCreateForm/>
 				</div>
 			</AuthRequired>

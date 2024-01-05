@@ -22,23 +22,23 @@ const Home: React.FC = () => {
 		<>
 			<nav className="navbar navbar-expand-lg bg-light shadow" data-bs-theme="light">
 				<div className="container">
-					<a className="navbar-brand">Hairdresser App</a>
+					<a className="navbar-brand">Fisiodesporto</a>
 					<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 						<span className="navbar-toggler-icon"></span>
 					</button>
 					<div className="collapse navbar-collapse" id="navbarNav">
 						<ul className="navbar-nav">
 							<li className="nav-item">
-								<NavLink className={`nav-link ${loggedIn ? "" : "disabled"}`} to={"/appointments"} data-testid={"nav-appointments-link"}>Appointments</NavLink>
+								<NavLink className={`nav-link ${loggedIn ? "" : "disabled"}`} to={"/appointments"} data-testid={"nav-appointments-link"}>Marcações</NavLink>
 							</li>
 							<li className="nav-item">
-								<NavLink className={`nav-link ${loggedIn ? "" : "disabled"}`} to={"/clients"} data-testid={"nav-clients-link"}>Clients</NavLink>
+								<NavLink className={`nav-link ${loggedIn ? "" : "disabled"}`} to={"/clients"} data-testid={"nav-clients-link"}>Clientes</NavLink>
 							</li>
 							<li className="nav-item">
-								<NavLink className={`nav-link ${loggedIn ? "" : "disabled"}`} to={"/services"} data-testid={"nav-services-link"}>Services</NavLink>
+								<NavLink className={`nav-link ${loggedIn ? "" : "disabled"}`} to={"/services"} data-testid={"nav-services-link"}>Serviços</NavLink>
 							</li>
 							<li className="nav-item">
-								<NavLink className={`nav-link ${loggedIn ? "" : "disabled"}`} to={"/users"} data-testid={"nav-users-link"}>Users</NavLink>
+								<NavLink className={`nav-link ${loggedIn ? "" : "disabled"}`} to={"/users"} data-testid={"nav-users-link"}>Utilizadores</NavLink>
 							</li>
 						</ul>
 						<ul className="navbar-nav ms-auto">

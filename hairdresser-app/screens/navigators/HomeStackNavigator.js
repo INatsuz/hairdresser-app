@@ -17,17 +17,17 @@ export default function HomeStackNavigator() {
 			<Stack.Screen
 				name={"AddAppointment"}
 				component={AddAppointment}
-				options={{title: 'Add Appointment', headerShown: true}}
+				options={{title: 'Nova Marcação', headerShown: true}}
 			/>
 			<Stack.Screen
 				name={"EditAppointment"}
 				component={EditAppointment}
-				options={{title: 'Edit Appointment', headerShown: true}}
+				options={{title: 'Editar Marcação', headerShown: true}}
 			/>
 			<Stack.Screen
 				name={"AddClient"}
 				component={AddClient}
-				options={{title: 'Add Client', headerShown: true}}
+				options={{title: 'Novo Cliente', headerShown: true}}
 			/>
 		</Stack.Navigator>
 	)

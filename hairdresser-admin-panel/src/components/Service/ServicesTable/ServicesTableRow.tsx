@@ -12,7 +12,7 @@ const ServicesTableRow: React.FC<ServicesTableRowProps> = ({service, deleteServi
 	const navigate = useNavigate();
 
 	function handleDeleteClick() {
-		if (confirm("Are you sure?")) {
+		if (confirm("Tem a certeza que quer eliminar este serviço?")) {
 			deleteService(service);
 		}
 	}
@@ -31,7 +31,7 @@ const ServicesTableRow: React.FC<ServicesTableRowProps> = ({service, deleteServi
 				<td>{service.ID}</td>
 				<td>{service.name}</td>
 				<td>€{(service.price / 100).toFixed(2)}</td>
-				<td>{service.estimatedTime} minutes</td>
+				<td>{service.estimatedTime} minutos</td>
 				<td><div className={"color-square"} style={{backgroundColor: `${service.color}`}}></div></td>
 				<td className={"text-end"}>
 					<button className={"btn btn-sm btn-primary me-2"}><i className={"bi-list"}></i></button>

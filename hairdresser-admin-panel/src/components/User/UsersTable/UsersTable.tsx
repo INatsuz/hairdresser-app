@@ -24,8 +24,8 @@ const UsersTable: React.FC<UsersTableProps> = ({users, setUsers}) => {
 					<tr>
 						<th>ID</th>
 						<th>Username</th>
-						<th>Name</th>
-						<th>User Type</th>
+						<th>Nome</th>
+						<th>Tipo de Utilizador</th>
 						<th>Notification Token</th>
 						<th></th>
 					</tr>
