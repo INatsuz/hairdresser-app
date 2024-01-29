@@ -14,7 +14,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@remix-run/web-fetch": "^4.4.1",
     "@vitest/coverage-v8": "^0.34.6",
-    "axios": "^1.5.1",
+    "axios": "1.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.1.2",
