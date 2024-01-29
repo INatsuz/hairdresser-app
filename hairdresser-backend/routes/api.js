@@ -115,7 +115,7 @@ router.post('/addClient', mustBeAdmin, function (req, res) {
 router.put("/editClient", mustBeAdmin, function (req, res) {
 	req.body.phone = req.body.phone.replace(/ /g, "");
 
-	db.query("UPDATE client SET name = ?, phone = ?, email = ?, birthday = ?, nif = ?, observations = ? WHERE ID = ?", [req.body.name, req.body.phone, req.body.email, req.body.birthday, req.body.nif, req.body.observations, req.body.ID]).then(() => {
+	db.query("UPDATE client SET name = ?, phone = ?, email = ?, birthday = ?, nif = ?, address = ?, observations = ? WHERE ID = ?", [req.body.name, req.body.phone, req.body.email, req.body.birthday, req.body.nif, req.body.address, req.body.observations, req.body.ID]).then(() => {
 		res.status(200).send("Edited client successfully");
 		console.log("Edited client successfully");
 	}).catch(err => {

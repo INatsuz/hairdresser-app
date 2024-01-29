@@ -3,6 +3,8 @@ import Home from "../Home";
 import EditAppointment from "../EditAppointment";
 import AddAppointment from "../AddAppointment";
 import AddClient from "../AddClient";
+import HomeDrawer from "./HomeDrawer";
+import EditClient from "../EditClient";
 
 export default function HomeStackNavigator() {
 	const Stack = createNativeStackNavigator();
@@ -10,9 +12,9 @@ export default function HomeStackNavigator() {
 	return(
 		<Stack.Navigator>
 			<Stack.Screen
-				name={"Home"}
-				component={Home}
-				options={{title: 'Home', headerShown: false}}
+				name={"HomeDrawer"}
+				component={HomeDrawer}
+				options={{title: 'HomeDrawer', headerShown: false}}
 			/>
 			<Stack.Screen
 				name={"AddAppointment"}
@@ -28,6 +30,11 @@ export default function HomeStackNavigator() {
 				name={"AddClient"}
 				component={AddClient}
 				options={{title: 'Novo Cliente', headerShown: true}}
+			/>
+			<Stack.Screen
+				name={"EditClient"}
+				component={EditClient}
+				options={{title: 'Editar Cliente', headerShown: true}}
 			/>
 		</Stack.Navigator>
 	)

@@ -15,6 +15,8 @@ import commonStyles from "../../styles/commonStyles";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function ClientForm({data, onSubmit, onDelete}) {
+	console.log(data)
+
 	const [name, setName] = useState(data ? data.name : "");
 	const [phone, setPhone] = useState(data ? data.phone : "");
 	const [email, setEmail] = useState(data ? data.email : "");
@@ -36,6 +38,7 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 			ID: data ? data.ID : null,
 			name: name,
 			phone: phone,
+			email: email,
 			birthday: birthday,
 			nif: nif,
 			address: address,

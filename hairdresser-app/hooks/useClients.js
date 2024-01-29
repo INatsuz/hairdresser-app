@@ -6,7 +6,11 @@ export default function useClients() {
 	const [clients, setClients] = useState([]);
 
 	useEffect(() => {
-		getWithAuth("api/getClients").then(res => {
+		fetchClients();
+	}, []);
+
+	function fetchClients() {
+		return getWithAuth("api/getClients").then(res => {
 			res.data.forEach(client => {
 				if (client.birthday) {
 					client.birthday = new Date(client.birthday);
@@ -17,7 +21,7 @@ export default function useClients() {
 		}).catch(() => {
 			console.log("Error fetching clients");
 		});
-	}, []);
+	}
 
-	return [clients, setClients];
+	return [clients, setClients, fetchClients];
 }
