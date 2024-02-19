@@ -64,7 +64,7 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 			assignedUser,
 			timeStart,
 			timeEnd,
-			price,
+			price: price.replace(',', '.'),
 			observations
 		}
 
