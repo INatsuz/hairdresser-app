@@ -82,30 +82,75 @@ export function postWithAuth(endpoint, data) {
 				},
 				timeout: 5000
 			}).then(res => {
-				if (res.status === 200) {
+				if (res.status === 200 || res.status === 201) {
 					resolve(res);
 				}
 			}).catch(err => {
-				if (err.response.status === 401) {
-					refreshTokens(refreshToken).then(({newAccessToken}) => {
-						axios.post(`https://${IP}/${endpoint}`, data, {
-							headers: {
-								Authorization: `Bearer ${newAccessToken}`
-							},
-							timeout: 5000
-						}).then(res => {
-							if (res.status === 200) {
-								resolve(res);
-							}
+				if (err.response) {
+					if (err.response.status === 401) {
+						refreshTokens(refreshToken).then(({newAccessToken}) => {
+							axios.post(`https://${IP}/${endpoint}`, data, {
+								headers: {
+									Authorization: `Bearer ${newAccessToken}`
+								},
+								timeout: 5000
+							}).then(res => {
+								if (res.status === 200) {
+									resolve(res);
+								}
+							}).catch(err => {
+								console.log(err);
+							});
 						}).catch(err => {
-							console.log(err);
+							logOff().then(r => reject(err));
 						});
-					}).catch(err => {
-						logOff().then(r => reject(err));
-					});
-				} else {
-					console.log(err);
-					reject(err);
+					} else {
+						console.log(err);
+						reject(err);
+					}
+				}
+			});
+		});
+	});
+}
+
+export function postWithAuthMultipart(endpoint, data) {
+	return new Promise(function (resolve, reject) {
+		getTokens().then(({accessToken, refreshToken}) => {
+			console.log(`https://${IP}/${endpoint}`)
+			axios.post(`https://${IP}/${endpoint}`, data, {
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+					"Content-Type": "multipart/form-data"
+				},
+				timeout: 5000
+			}).then(res => {
+				if (res.status === 200 || res.status === 201) {
+					resolve(res);
+				}
+			}).catch(err => {
+				if (err.response) {
+					if (err.response.status === 401) {
+						refreshTokens(refreshToken).then(({newAccessToken}) => {
+							axios.post(`https://${IP}/${endpoint}`, data, {
+								headers: {
+									Authorization: `Bearer ${newAccessToken}`
+								},
+								timeout: 5000
+							}).then(res => {
+								if (res.status === 200) {
+									resolve(res);
+								}
+							}).catch(err => {
+								console.log(err);
+							});
+						}).catch(err => {
+							logOff().then(r => reject(err));
+						});
+					} else {
+						console.log(err);
+						reject(err);
+					}
 				}
 			});
 		});
@@ -177,25 +222,27 @@ export function deleteWithAuth(endpoint) {
 					resolve(res);
 				}
 			}).catch(err => {
-				if (err.response.status === 401) {
-					refreshTokens(refreshToken).then(({newAccessToken, newRefreshToken}) => {
-						axios.delete(`https://${IP}/${endpoint}`, {
-							headers: {
-								Authorization: `Bearer ${newAccessToken}`
-							},
-							timeout: 5000
-						}).then(res => {
-							resolve(res);
+				if (err.response) {
+					if (err.response.status === 401) {
+						refreshTokens(refreshToken).then(({newAccessToken, newRefreshToken}) => {
+							axios.delete(`https://${IP}/${endpoint}`, {
+								headers: {
+									Authorization: `Bearer ${newAccessToken}`
+								},
+								timeout: 5000
+							}).then(res => {
+								resolve(res);
+							}).catch(err => {
+								console.log(err);
+							});
 						}).catch(err => {
-							console.log(err);
+							store.dispatch(logoffAction());
+							reject(err);
 						});
-					}).catch(err => {
-						store.dispatch(logoffAction());
+					} else {
+						console.log(err);
 						reject(err);
-					});
-				} else {
-					console.log(err);
-					reject(err);
+					}
 				}
 			});
 		});

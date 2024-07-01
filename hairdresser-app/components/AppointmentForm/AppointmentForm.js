@@ -42,11 +42,11 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 	let timeEndString = String(timeEnd.getDate()).padStart(2, "0") + "/" + String(timeEnd.getMonth() + 1).padStart(2, "0") + "/" + timeEnd.getFullYear() + " " + String(timeEnd.getHours()).padStart(2, "0") + ":" + String(timeEnd.getMinutes()).padStart(2, "0");
 
 	useEffect(() => {
-		const serviceObj = services.find(s => s.ID === service);
-
 		if (data) {
-			if(service === data.serviceID && timeStart.getTime() === new Date(data.timeStart).getTime()) {}return;
+			if(service === data.serviceID && timeStart.getTime() === new Date(data.timeStart).getTime()) return;
 		}
+
+		const serviceObj = services.find(s => s.ID === service);
 
 		if (serviceObj) {
 			const timeEnd = new Date(timeStart);
@@ -55,6 +55,20 @@ export default function AppointmentForm({data, onSubmit, onDelete}) {
 			setPrice((serviceObj.price / 100).toFixed(2));
 		}
 	}, [service, timeStart]);
+
+	useEffect(() => {
+		if (data) {
+			return;
+			if(client === data.clientID) return;
+		}
+
+		const clientObj = clients.find(c => c.ID === client);
+
+		if (clientObj) {
+			const clientObservations = clientObj.observations;
+			setObservations(clientObservations);
+		}
+	}, [client]);
 
 	function onSubmitPress() {
 		const appointment = {

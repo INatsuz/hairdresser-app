@@ -1,7 +1,25 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const db = require("../utils/db");
 const {mustBeAdmin, mustBeAuthenticated} = require("../utils/authentication");
 const router = express.Router();
+const multer = require('multer')
+
+const upload = multer({
+	storage: multer.diskStorage(
+		{
+			destination: function (req, file, cb) {
+				const path = `${__dirname}/../files/${req.body.clientId}`;
+				fs.mkdirSync(path, {recursive: true});
+				cb(null, path);
+			},
+			filename: (req, file, cb) => {
+				cb(null, file.originalname);
+			}
+		}
+	)
+});
 
 router.get('/getAppointments', mustBeAdmin, function (req, res) {
 	let {startDate, endDate} = req.query;
@@ -45,7 +63,6 @@ router.get('/getAppointments', mustBeAdmin, function (req, res) {
 
 router.get('/getAssignedAppointments', mustBeAuthenticated, function (req, res) {
 	db.query("SELECT * FROM appointment WHERE assignedUser = ?", [req.tokenPayload.ID]).then(({result}) => {
-		console.log(result);
 		res.json(result);
 	}).catch(err => {
 		console.log(err);
@@ -90,7 +107,6 @@ router.delete("/deleteAppointment/:ID", mustBeAdmin, function (req, res) {
 
 router.get('/getClients', mustBeAdmin, function (req, res) {
 	db.query("SELECT * FROM client").then(({result}) => {
-		console.log(result);
 		res.status(200).json(result);
 	}).catch(err => {
 		res.status(400);
@@ -199,6 +215,79 @@ router.delete("/deleteUser/:ID", mustBeAdmin, function (req, res) {
 		res.status(400).send("Failed to delete user");
 		console.log("Failed to delete user");
 		console.log(err);
+	});
+});
+
+router.post("/saveClientFile", upload.single('file'), mustBeAdmin, function (req, res, next) {
+	// Checks if all information necessary is given (client ID and the file)
+	if (!req.body.clientId || !req.file) {
+		res.status(400);
+	}
+
+	const relativePath = path.relative(__dirname + "/..", req.file.path);
+	console.log(relativePath);
+
+	db.query("INSERT INTO clientFiles VALUES (NULL, ?, ?)", [req.body.clientId, relativePath]).then(() => {
+		console.log("Test")
+		res.status(201).send("File saved successfully");
+	}).catch(err => {
+		console.log(err);
+		res.status(400).send("Failed to save file");
+	});
+});
+
+router.get("/getClientFiles", mustBeAdmin, function (req, res, next) {
+	db.query("SELECT * FROM clientFiles WHERE clientID = ?", [req.query.clientID]).then(({result}) => {
+		console.log(result);
+		res.status(200).json(result);
+	}).catch(err => {
+		console.log(err);
+		res.status(400).send("Couldn't get client files");
+	});
+});
+
+router.delete("/deleteClientFile", mustBeAdmin, function (req, res, next) {
+	db.query("SELECT * FROM clientFiles WHERE ID = ?", [req.query.ID]).then(({result}) => {
+		if (result.length > 0) {
+			fs.rmSync(path.resolve(__dirname + "/../" + result[0].file));
+
+			db.query("DELETE FROM clientFiles WHERE ID = ?", [req.query.ID]).then(({result}) => {
+				console.log(result);
+				res.status(200).send("Deleted file successfully");
+			}).catch(err => {
+				console.log(err);
+				res.status(400).send("Couldn't delete file");
+			});
+		} else {
+			res.status(400).send("Couldn't delete file");
+		}
+	}).catch(err => {
+		console.log(err);
+		res.status(400).send("Couldn't delete file");
+	});
+});
+
+router.put("/renameClientFile", mustBeAdmin, function (req, res, next) {
+	db.query("SELECT * FROM clientFiles WHERE ID = ?", [req.body.ID]).then(({result}) => {
+		if (result.length > 0) {
+			console.log(result[0]);
+			const newPath = path.relative(__dirname + "/..", result[0].file.slice(0, result[0].file.lastIndexOf("/") + 1) + req.body.newFilename + result[0].file.slice(result[0].file.lastIndexOf(".")));
+			console.log(newPath);
+
+			fs.renameSync(path.resolve(__dirname + "/../" + result[0].file), path.resolve(__dirname + "/../" + newPath));
+			db.query("UPDATE clientFiles SET file = ? WHERE ID = ?", [newPath, req.body.ID]).then(({result}) => {
+				console.log(result);
+				res.status(200).send("Renamed file successfully");
+			}).catch(err => {
+				console.log(err);
+				res.status(400).send("Couldn't rename file");
+			});
+		} else {
+			res.status(400).send("Couldn't rename file");
+		}
+	}).catch(err => {
+		console.log(err);
+		res.status(400).send("Couldn't rename file");
 	});
 });
 

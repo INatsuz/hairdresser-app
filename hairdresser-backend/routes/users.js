@@ -6,7 +6,9 @@ const {
 	verifyToken,
 	generateTokens,
 	mustBeAuthenticated,
-	USER_TYPES, mustBeAdmin
+	USER_TYPES,
+	mustBeAdmin,
+	generateResourceToken
 } = require("../utils/authentication");
 const db = require('../utils/db');
 
@@ -14,8 +16,6 @@ const SALT_ROUNDS = 10;
 
 // Login POST method
 router.post('/login', function (req, res, next) {
-
-	console.log(req.body);
 	verifyLoginAndGenerateTokens(req.body.username, req.body.password).then(({accessToken, refreshToken, payload}) => {
 		let date = new Date();
 		date.setTime(date.getTime() + 2 * 60 * 60 * 1000);
@@ -125,6 +125,15 @@ router.get("/getUserData", mustBeAuthenticated, function (req, res, next) {
 		});
 	}).catch(err => {
 		console.log(err);
+	});
+});
+
+router.get("/getResourceToken", mustBeAdmin, function (req, res) {
+	generateResourceToken(req.query.ID).then(r => {
+		res.status(200).json(r);
+	}).catch(err => {
+		console.log(err);
+		res.status(400).json({err: "Could not generate resource token"});
 	});
 });
 

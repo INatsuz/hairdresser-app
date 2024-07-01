@@ -24,6 +24,8 @@ export default function Home({navigation}) {
 	}
 
 	function navigateToEdit(data) {
+		data.timeStart = data.timeStart.toISOString();
+		data.timeEnd = data.timeEnd.toISOString();
 		navigation.navigate('EditAppointment', {data: data});
 	}
 

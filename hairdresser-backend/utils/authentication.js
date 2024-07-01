@@ -3,9 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = "cdFdvoPUkkjuJmTJiSGk4xGGf1tc15qp";
+const RESOURCE_JWT_SECRET = "64mYEdrGkO3VTrmLxU9DSDGAzFLd1IMn";
 
 const ACCESS_TOKEN_DURATION = "2h";
 const REFRESH_TOKEN_DURATION = "7d";
+const RESOURCE_TOKEN_DURATION = "5m";
 
 const USER_TYPES = {ADMIN: 'ADMIN', HAIRDRESSER: 'HAIRDRESSER'}
 
@@ -107,6 +109,24 @@ function generateTokens(payload) {
 	});
 }
 
+function generateResourceToken(fileID) {
+	let payload = {
+		isResourceToken: true,
+		fileID: fileID
+	};
+
+	return new Promise(function (resolve, reject) {
+		jwt.sign(payload, RESOURCE_JWT_SECRET, {expiresIn: RESOURCE_TOKEN_DURATION}, function (err, resourceToken) {
+			if (err) {
+				console.log(err);
+				reject(err);
+			}
+
+			resolve({resourceToken});
+		});
+	});
+}
+
 function refreshAccessToken(refreshToken) {
 	return new Promise((resolve, reject) => {
 		verifyToken(refreshToken).then(payload => {
@@ -121,7 +141,7 @@ function refreshAccessToken(refreshToken) {
 	});
 }
 
-function mustBeAuthenticated(req, res, next) {
+function extractTokenFromRequest(req, res) {
 	let auth;
 
 	if (req.cookies.jwt) {
@@ -139,7 +159,11 @@ function mustBeAuthenticated(req, res, next) {
 		res.status(401).json({err: "Unauthorized"});
 		return;
 	}
-	let accessToken = auth.slice(7);
+	return auth.slice(7);
+}
+
+function mustBeAuthenticated(req, res, next) {
+	let accessToken = extractTokenFromRequest(req, res);
 
 	jwt.verify(accessToken, JWT_SECRET, {}, function (err, payload) {
 		if (err) {
@@ -158,24 +182,7 @@ function mustBeAuthenticated(req, res, next) {
 }
 
 function mustBeAdmin(req, res, next) {
-	let auth;
-
-	if (req.cookies.jwt) {
-		auth = req.cookies.jwt;
-	} else {
-		auth = req.header("Authorization");
-	}
-
-	if (!auth) {
-		res.status(401).json({err: "Unauthorized"});
-		return;
-	}
-
-	if (!auth.startsWith("Bearer ")) {
-		res.status(401).json({err: "Unauthorized"});
-		return;
-	}
-	let accessToken = auth.slice(7);
+	let accessToken = extractTokenFromRequest(req, res);
 
 	jwt.verify(accessToken, JWT_SECRET, {}, function (err, payload) {
 		if (err) {
@@ -199,6 +206,36 @@ function mustBeAdmin(req, res, next) {
 	});
 }
 
+function mustHaveResourceToken(req, res, next) {
+	let resourceToken = req.query.t;
+
+	if (!resourceToken) {
+		resourceToken = extractTokenFromRequest(req, res);
+	}
+
+	jwt.verify(resourceToken, RESOURCE_JWT_SECRET, {}, function (err, payload) {
+		if (err) {
+			res.status(401).json({err: "Unauthorized"});
+			return;
+		}
+		db.query("SELECT * FROM clientFiles WHERE ID = ?", [payload.fileID]).then(({result}) => {
+			if (result.length > 0) {
+				if (result[0].file === req.originalUrl.slice(1, req.originalUrl.indexOf("?"))) {
+					req.tokenPayload = payload;
+					next();
+				} else {
+					res.status(401).json({err: "Couldn't verify your permissions"});
+				}
+			} else {
+				res.status(401).json({err: "Couldn't verify your permissions"});
+			}
+		}).catch(err => {
+			console.log(err);
+			res.status(401).json({err: "Couldn't verify your permissions"});
+		});
+	});
+}
+
 module.exports.ACCESS_TOKEN_DURATION = ACCESS_TOKEN_DURATION
 module.exports.REFRESH_TOKEN_DURATION = REFRESH_TOKEN_DURATION
 module.exports.USER_TYPES = USER_TYPES;
@@ -206,5 +243,7 @@ module.exports.verifyLoginCredentials = verifyLoginCredentials;
 module.exports.verifyLoginAndGenerateTokens = verifyLoginAndGenerateTokens;
 module.exports.verifyToken = verifyToken;
 module.exports.generateTokens = generateTokens;
+module.exports.generateResourceToken = generateResourceToken;
 module.exports.mustBeAuthenticated = mustBeAuthenticated;
 module.exports.mustBeAdmin = mustBeAdmin;
+module.exports.mustHaveResourceToken = mustHaveResourceToken;
