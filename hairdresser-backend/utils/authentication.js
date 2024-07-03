@@ -219,7 +219,7 @@ function mustHaveResourceToken(req, res, next) {
 			return;
 		}
 		db.query("SELECT * FROM clientFiles WHERE ID = ?", [payload.fileID]).then(({result}) => {
-			req.originalUrl = decodeURI(result.originalUrl);
+			req.originalUrl = decodeURI(req.originalUrl);
 			if (result.length > 0) {
 				if (result[0].file === req.originalUrl.slice(1, req.originalUrl.indexOf("?"))) {
 					req.tokenPayload = payload;
