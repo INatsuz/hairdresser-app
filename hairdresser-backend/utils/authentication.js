@@ -219,14 +219,17 @@ function mustHaveResourceToken(req, res, next) {
 			return;
 		}
 		db.query("SELECT * FROM clientFiles WHERE ID = ?", [payload.fileID]).then(({result}) => {
+			req.originalUrl = decodeURI(result.originalUrl);
 			if (result.length > 0) {
 				if (result[0].file === req.originalUrl.slice(1, req.originalUrl.indexOf("?"))) {
 					req.tokenPayload = payload;
 					next();
 				} else {
+					console.log("Wrong file url");
 					res.status(401).json({err: "Couldn't verify your permissions"});
 				}
 			} else {
+				console.log("No client file results found for your token");
 				res.status(401).json({err: "Couldn't verify your permissions"});
 			}
 		}).catch(err => {
