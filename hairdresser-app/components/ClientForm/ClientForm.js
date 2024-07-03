@@ -165,10 +165,13 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 	}
 
 	function onFileLinkPress(fileID, filepath) {
+		const folderPath = filepath.slice(0, filepath.lastIndexOf("/") + 1);
+		const filename = filepath.slice(filepath.lastIndexOf("/") + 1);
+
 		getWithAuth(`users/getResourceToken?ID=${fileID}`).then(res => {
 			const token = res.data.resourceToken;
 			console.log(token);
-			Linking.openURL(`https://${IP}/${filepath}?t=${token}`);
+			Linking.openURL(`https://${IP}/${folderPath}${encodeURIComponent(filename)}?t=${token}`);
 		});
 	}
 

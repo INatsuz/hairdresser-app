@@ -216,26 +216,29 @@ function mustHaveResourceToken(req, res, next) {
 	jwt.verify(resourceToken, RESOURCE_JWT_SECRET, {}, function (err, payload) {
 		if (err) {
 			res.status(401).json({err: "Unauthorized"});
-			return;
-		}
-		db.query("SELECT * FROM clientFiles WHERE ID = ?", [payload.fileID]).then(({result}) => {
-			req.originalUrl = decodeURI(req.originalUrl);
-			if (result.length > 0) {
-				if (result[0].file === req.originalUrl.slice(1, req.originalUrl.indexOf("?"))) {
-					req.tokenPayload = payload;
-					next();
+		} else {
+			db.query("SELECT * FROM clientFiles WHERE ID = ?", [payload.fileID]).then(({result}) => {
+				const decodedUrl = req.originalUrl.slice(1, req.originalUrl.lastIndexOf("/") + 1) + decodeURIComponent(req.originalUrl.slice(req.originalUrl.lastIndexOf("/") + 1, req.originalUrl.indexOf("?")));
+				console.log(req.originalUrl.slice(req.originalUrl.lastIndexOf("/") + 1, req.originalUrl.indexOf("?")));
+				console.log(decodedUrl);
+
+				if (result.length > 0) {
+					if (result[0].file === decodedUrl) {
+						req.tokenPayload = payload;
+						next();
+					} else {
+						console.log("Wrong file url");
+						res.status(401).json({err: "Couldn't verify your permissions"});
+					}
 				} else {
-					console.log("Wrong file url");
+					console.log("No client file results found for your token");
 					res.status(401).json({err: "Couldn't verify your permissions"});
 				}
-			} else {
-				console.log("No client file results found for your token");
+			}).catch(err => {
+				console.log(err);
 				res.status(401).json({err: "Couldn't verify your permissions"});
-			}
-		}).catch(err => {
-			console.log(err);
-			res.status(401).json({err: "Couldn't verify your permissions"});
-		});
+			});
+		}
 	});
 }
 
