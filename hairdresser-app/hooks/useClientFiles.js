@@ -6,6 +6,8 @@ export default function useClientFiles(clientID) {
 	const [clientFiles, setClientFiles] = useState([]);
 
 	useEffect(() => {
+		if(clientID !== null && clientID !== undefined && clientID !== -1){} {}
+
 		fetchClientFiles();
 	}, []);
 

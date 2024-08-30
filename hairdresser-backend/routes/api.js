@@ -228,7 +228,6 @@ router.post("/saveClientFile", upload.single('file'), mustBeAdmin, function (req
 	console.log(relativePath);
 
 	db.query("INSERT INTO clientFiles VALUES (NULL, ?, ?)", [req.body.clientId, relativePath]).then(() => {
-		console.log("Test")
 		res.status(201).send("File saved successfully");
 	}).catch(err => {
 		console.log(err);

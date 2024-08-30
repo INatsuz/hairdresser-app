@@ -28,7 +28,7 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 	const [nif, setNif] = useState(data ? data.nif : "");
 	const [address, setAddress] = useState(data ? data.address : "");
 	const [observations, setObservations] = useState(data ? data.observations : "");
-	const [files, setFiles, fetchFiles] = useClientFiles(data.ID);
+	const [files, setFiles, fetchFiles] = useClientFiles(data ? data.ID : -1);
 
 	const [isFilenameDialogVisible, setIsFilenameDialogVisible] = useState(false);
 	const [isFilenameChangeDialogVisible, setIsFilenameChangeDialogVisible] = useState(false);

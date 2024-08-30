@@ -1,4 +1,5 @@
-import {Platform, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Platform, StatusBar, StyleSheet, Text, View} from "react-native";
+import {TouchableOpacity, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {memo, useState} from 'react';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Tooltip from "react-native-walkthrough-tooltip";
@@ -16,12 +17,12 @@ function AppointmentListItem(props) {
 	});
 
 	return (
-		<TouchableOpacity delayPressIn={20} onPress={() => props.onItemPress(props.data)}>
+		<TouchableOpacity onPress={() => props.onItemPress(props.data)}>
 			<View style={[styles.listItemContainer, variableStyles.statusBorderColor]}>
 				{
 					props.data.assignedUser &&
 					<View style={styles.driverIconPosition}>
-						<Pressable onPress={() => setIsTooltipVisible(true)}>
+						<TouchableWithoutFeedback onPress={() => setIsTooltipVisible(true)}>
 							<View style={styles.driverIconContainer}>
 								<Tooltip
 									isVisible={isTooltipVisible}
@@ -37,7 +38,7 @@ function AppointmentListItem(props) {
 									<Ionicons name={"person"} size={16} color={props.data.color}/>
 								</Tooltip>
 							</View>
-						</Pressable>
+						</TouchableWithoutFeedback>
 					</View>
 				}
 				<View style={styles.fieldSection}>

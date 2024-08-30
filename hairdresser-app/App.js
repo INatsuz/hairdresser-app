@@ -14,10 +14,10 @@ export default function App() {
 		<ActionSheetProvider>
 			<MenuProvider>
 				<View style={[commonStyles.flex1Container, {backgroundColor: "white"}]}>
-					<StatusBar backgroundColor={"white"} translucent={true}/>
+					<StatusBar backgroundColor={"white"} barStyle={"dark-content"} translucent={true}/>
 					<Provider store={store}>
 						<NavigationContainer ref={navigationRef}>
-							<LoginTabStackNavigator />
+							<LoginTabStackNavigator/>
 						</NavigationContainer>
 					</Provider>
 				</View>
