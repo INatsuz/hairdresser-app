@@ -26,6 +26,11 @@ export default function AppointmentAgenda() {
 		});
 	}
 
+	function reservationsKeyExtractor(dayAgenda, index) {
+		console.log(dayAgenda);
+		return `${dayAgenda.reservation.ID}`;
+	}
+
 	function convertAppointmentsToAgendaItems(appointments) {
 		const agendaItems = {};
 
@@ -41,15 +46,15 @@ export default function AppointmentAgenda() {
 			});
 		}
 
+		console.log(agendaItems);
 		return agendaItems;
 	}
 
-	const renderItem = (reservation) => {
+	const renderItem = (reservation, isFirst) => {
 		const fontSize = 16;
 
 		return (
 			<TouchableOpacity
-				key={reservation.id}
 				style={styles.item}
 				onPress={() => {
 					if (reservation && reservation.timeStart instanceof Date && reservation.timeEnd instanceof Date) {
@@ -85,6 +90,7 @@ export default function AppointmentAgenda() {
 			showOnlySelectedDayItems={true}
 			renderEmptyData={renderEmptyData}
 			renderItem={renderItem}
+			reservationsKeyExtractor={reservationsKeyExtractor}
 		/>
 	);
 };

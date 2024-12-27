@@ -8,7 +8,7 @@ const cors = require("cors");
 const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
 const apiRouter = require('./routes/api');
-const {mustBeAdmin, mustHaveResourceToken} = require("./utils/authentication");
+const {mustHaveResourceToken} = require("./utils/authentication");
 
 const http_app = express();
 

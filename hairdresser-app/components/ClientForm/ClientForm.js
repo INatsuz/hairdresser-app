@@ -71,10 +71,11 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 					onPress: () => {
 						onDelete(data.ID);
 					}
-				}, {
-				text: "Cancelar",
-				style: "cancel"
-			}
+				},
+				{
+					text: "Cancelar",
+					style: "cancel"
+				}
 			]
 		);
 	}

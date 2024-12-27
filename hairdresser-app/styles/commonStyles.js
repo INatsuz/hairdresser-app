@@ -1,7 +1,7 @@
-import {NativeModules, Platform, StyleSheet} from "react-native";
+import {NativeModules, Platform, StatusBar, StyleSheet} from "react-native";
 
 const {StatusBarManager} = NativeModules;
-const statusBarHeight = Platform.OS === "ios" ? 0 : StatusBarManager.HEIGHT;
+const statusBarHeight = Platform.OS === "ios" ? 0 : StatusBar.currentHeight;
 
 const styles = StyleSheet.create({
 	topPaddingContainer: {

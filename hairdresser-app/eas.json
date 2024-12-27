@@ -5,7 +5,11 @@
 	"build": {
 		"development": {
 			"developmentClient": true,
-			"distribution": "internal"
+			"distribution": "internal",
+			"env": {
+				"EXPO_PUBLIC_API_URL": "dev.vraminhos.com",
+				"EXPO_PUBLIC_APPOINTMENT_LIMIT": "6"
+			}
 		},
 		"preview": {
 			"distribution": "internal",
@@ -13,7 +17,8 @@
 				"buildType": "apk"
 			},
 			"env": {
-				"EXPO_PUBLIC_API_URL": "fisio.vraminhos.com"
+				"EXPO_PUBLIC_API_URL": "fisio.vraminhos.com",
+				"EXPO_PUBLIC_APPOINTMENT_LIMIT": "6"
 			}
 		},
 		"production": {}
