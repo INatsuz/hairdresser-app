@@ -43,7 +43,7 @@ router.get('/getAppointments', mustBeAdmin, function (req, res) {
 		queryFilter = "WHERE " + clauses.join(" AND ");
 	}
 
-	db.query(`SELECT appointment.*, service.name as serviceName, client.name as clientName, appuser.name as assignedUserName
+	db.query(`SELECT appointment.*, service.name as serviceName, service.color, client.name as clientName, appuser.name as assignedUserName
 					FROM appointment 
 					LEFT JOIN service 
 					ON service.ID = appointment.serviceID
