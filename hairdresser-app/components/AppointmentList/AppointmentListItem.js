@@ -12,7 +12,7 @@ function AppointmentListItem(props) {
 
 	let variableStyles = StyleSheet.create({
 		statusBorderColor: {
-			borderRightColor: "red"
+			borderRightColor: props.data.color
 		}
 	});
 

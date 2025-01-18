@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import {
 	Alert,
 	Button, FlatList,
-	KeyboardAvoidingView, Linking,
+	KeyboardAvoidingView, Linking, Modal,
 	Platform,
 	Pressable,
 	ScrollView,
@@ -87,12 +87,20 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 		showActionSheetWithOptions({options, cancelButtonIndex}, async (selectedIndex) => {
 			switch (selectedIndex) {
 				case 0:
+					console.log("Choose PDF");
 					DocumentPicker.getDocumentAsync({type: "application/pdf"}).then(docRes => {
 						if (!docRes.canceled) {
 							selectedFileRes.current = docRes;
-							setIsFilenameDialogVisible(true);
+							if (Platform.OS === "android") {
+								setIsFilenameDialogVisible(true);
+							} else {
+								Alert.prompt("Nome do ficheiro", "Insere um nome para o ficheiro", text => {
+									console.log(text)
+									setFilenameInputText(text);
+									onFilenameConfirm(text);
+								})
+							}
 						}
-						selectedFileRes.current = docRes;
 					});
 
 					break;
@@ -101,11 +109,22 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 
 					if (!imageResult.canceled) {
 						selectedFileRes.current = imageResult;
-						setIsFilenameDialogVisible(true);
+						if (Platform.OS === "android") {
+							setIsFilenameDialogVisible(true);
+						} else {
+							Alert.prompt("Nome do ficheiro", "Insere um nome para o ficheiro", text => {
+								console.log(text);
+								setFilenameInputText(text);
+								onFilenameConfirm(text);
+							});
+						}
+					} else {
+						setIsFilenameDialogVisible(false);
 					}
 
 					break;
 				case 2:
+					console.log("Take Photo");
 					let cameraPermissions = await ImagePicker.getCameraPermissionsAsync();
 					if (!cameraPermissions.granted) {
 						if (cameraPermissions.canAskAgain) {
@@ -113,12 +132,26 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 						}
 					}
 					if (cameraPermissions.granted) {
+						console.log("Opening camera...")
 						const imageResult = await ImagePicker.launchCameraAsync();
 
 						if (!imageResult.canceled) {
 							selectedFileRes.current = imageResult;
-							setIsFilenameDialogVisible(true);
+							if (Platform.OS === "android") {
+								setIsFilenameDialogVisible(true);
+							} else {
+								Alert.prompt("Nome do ficheiro", "Insere um nome para o ficheiro", text => {
+									console.log(text);
+									setFilenameInputText(text);
+									onFilenameConfirm(text);
+								});
+							}
+						} else {
+							setIsFilenameDialogVisible(false);
 						}
+
+					} else {
+						setIsFilenameDialogVisible(false);
 					}
 
 					break;
@@ -144,7 +177,14 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 					break;
 				case 1:
 					fileBeingRenamed.current = fileID;
-					setIsFilenameChangeDialogVisible(true);
+					if (Platform.OS === "android") {
+						setIsFilenameChangeDialogVisible(true);
+					} else {
+						Alert.prompt("Nome do ficheiro", "Insere um nome para o ficheiro", text => {
+							setFilenameInputText(text);
+							onFilenameChangeConfirm();
+						});
+					}
 
 					break;
 				case cancelButtonIndex:
@@ -153,16 +193,25 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 		});
 	}
 
-	function onFilenameConfirm() {
-		setIsFilenameDialogVisible(false);
-		sendFile(selectedFileRes.current, filenameInputText);
-		setFilenameInputText("");
+	function onFilenameConfirm(filename) {
+		console.log("Filename Confirm")
+		if (filename) {
+			sendFile(selectedFileRes.current, filename);
+		} else {
+			sendFile(selectedFileRes.current, filenameInputText);
+			setIsFilenameDialogVisible(false);
+			setFilenameInputText("");
+		}
 	}
 
-	function onFilenameChangeConfirm() {
-		setIsFilenameChangeDialogVisible(false);
-		sendFilenameChange(filenameInputText);
-		setFilenameInputText("");
+	function onFilenameChangeConfirm(filename) {
+		if (filename) {
+			sendFilenameChange(filename);
+		} else {
+			setIsFilenameChangeDialogVisible(false);
+			sendFilenameChange(filenameInputText);
+			setFilenameInputText("");
+		}
 	}
 
 	function onFileLinkPress(fileID, filepath) {
@@ -183,7 +232,7 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 			let file = {
 				uri: fileResult.assets[0].uri,
 				type: fileResult.assets[0].mimeType,
-				name: filename + fileResult.assets[0].uri.slice(fileResult.assets[0].uri.lastIndexOf('.')) ?? fileResult.assets[0].name ?? fileResult.assets[0].fileName,
+				name: filename.trim() + fileResult.assets[0].uri.slice(fileResult.assets[0].uri.lastIndexOf('.')) ?? fileResult.assets[0].name ?? fileResult.assets[0].fileName,
 			};
 
 			formData.append("clientId", data.ID);
@@ -210,6 +259,8 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 		});
 	}
 
+	console.log(isFilenameDialogVisible);
+
 	return (
 		<KeyboardAvoidingView style={commonStyles.formContainer} behavior={Platform.OS === 'ios' ? 'padding' : ''} keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}>
 			{pickingDate && Platform.OS === "android" &&
@@ -219,25 +270,28 @@ export default function ClientForm({data, onSubmit, onDelete}) {
 				}}/>
 			}
 
-			<Dialog.Container visible={isFilenameDialogVisible}>
-				<Dialog.Title>Nome do ficheiro</Dialog.Title>
-				<Dialog.Description>
-					Insere um nome para o ficheiro
-				</Dialog.Description>
-				<Dialog.Input onChangeText={v => setFilenameInputText(v)}/>
-				<Dialog.Button label="Guardar" onPress={onFilenameConfirm}/>
-				<Dialog.Button label="Cancelar" onPress={() => setIsFilenameDialogVisible(false)}/>
-			</Dialog.Container>
-
-			<Dialog.Container visible={isFilenameChangeDialogVisible}>
-				<Dialog.Title>Nome do ficheiro</Dialog.Title>
-				<Dialog.Description>
-					Insere um nome para o ficheiro
-				</Dialog.Description>
-				<Dialog.Input onChangeText={v => setFilenameInputText(v)}/>
-				<Dialog.Button label="Guardar" onPress={onFilenameChangeConfirm}/>
-				<Dialog.Button label="Cancelar" onPress={() => setIsFilenameChangeDialogVisible(false)}/>
-			</Dialog.Container>
+			{Platform.OS === "android" &&
+				<Dialog.Container visible={isFilenameDialogVisible}>
+					<Dialog.Title>Nome do ficheiro</Dialog.Title>
+					<Dialog.Description>
+						Insere um nome para o ficheiro
+					</Dialog.Description>
+					<Dialog.Input onChangeText={v => setFilenameInputText(v)}/>
+					<Dialog.Button label="Guardar" onPress={() => onFilenameConfirm()}/>
+					<Dialog.Button label="Cancelar" onPress={() => setIsFilenameDialogVisible(false)}/>
+				</Dialog.Container>
+			}
+			{Platform.OS === "android" &&
+				<Dialog.Container visible={isFilenameChangeDialogVisible}>
+					<Dialog.Title>Nome do ficheiro</Dialog.Title>
+					<Dialog.Description>
+						Insere um nome para o ficheiro
+					</Dialog.Description>
+					<Dialog.Input onChangeText={v => setFilenameInputText(v)}/>
+					<Dialog.Button label="Guardar" onPress={() => onFilenameChangeConfirm()}/>
+					<Dialog.Button label="Cancelar" onPress={() => setIsFilenameChangeDialogVisible(false)}/>
+				</Dialog.Container>
+			}
 
 			<ScrollView style={commonStyles.flex1Container}>
 				<Text style={commonStyles.labelTextStyle}>Nome:</Text>
