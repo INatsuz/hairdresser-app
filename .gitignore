@@ -6,3 +6,4 @@ hairdresser-admin-panel/node_modules
 .idea
 
 *.env*
+!.env.template
