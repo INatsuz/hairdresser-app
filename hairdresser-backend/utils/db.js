@@ -1,13 +1,13 @@
-const mysql = require("mysql2");
+const mariadb = require("mariadb");
 
 console.log("test");
 
-const pool = mysql.createPool({
+const pool = mariadb.createPool({
 	connectionLimit: 10,
 	host: process.env.DB_HOST,
 	user: process.env.DB_USERNAME,
 	password: process.env.DB_PASSWORD,
-	database: 'hairdresser',
+	database: 'fisiodesporto',
 	timezone: 'Z',
 	charset: 'utf8mb4'
 });
@@ -23,7 +23,7 @@ function query(query, params, callback) {
 			}
 
 			conn.query(query, params, function (err, result, fields) {
-				conn.release();
+				conn.end();
 				if (callback) {
 					callback(err, result, fields);
 				}
