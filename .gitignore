@@ -1,5 +1,6 @@
 hairdresser-backend/node_modules
 hairdresser-backend/files
+hairdresser-backend/ssl
 hairdresser-app/node_modules
 hairdresser-admin-panel/node_modules
 .idea
