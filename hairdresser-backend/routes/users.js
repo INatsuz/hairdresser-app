@@ -46,7 +46,7 @@ router.post('/register', mustBeAdmin, function (req, res, next) {
 	let {username, password, name, userType} = req.body
 	bcrypt.hash(password, SALT_ROUNDS, function (err, hash) {
 		db.query(`INSERT INTO appuser(username, password, name, userType) 
-					VALUES (?, ?, ?, ?)`, [username, hash, name, userType]).then(({result, fields}) => {
+					VALUES (?, ?, ?, ?)`, [username, hash, name, userType]).then(({result}) => {
 			res.status(200).send("Account created successfully");
 		}).catch(err => {
 			console.log(err.code);
@@ -78,7 +78,7 @@ router.post("/renew", function (req, res, next) {
 });
 
 router.get("/checkLogin", mustBeAuthenticated, function (req, res, next) {
-	db.query("SELECT * FROM appuser WHERE ID = ?", [req.tokenPayload.ID]).then(({result: user, fields}) => {
+	db.query("SELECT * FROM appuser WHERE ID = ?", [req.tokenPayload.ID]).then(({result: user}) => {
 		res.status(200).json({
 			"loggedIn": true,
 			user: {

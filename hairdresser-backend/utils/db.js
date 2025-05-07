@@ -14,27 +14,19 @@ const pool = mariadb.createPool({
 
 function query(query, params, callback) {
 	return new Promise(function (resolve, reject) {
-		pool.getConnection(function (err, conn) {
-			if (err) {
-				console.log(err);
-				console.log("Could not get pool connection")
-				reject(err);
-				return;
-			}
-
-			conn.query(query, params, function (err, result, fields) {
+		pool.getConnection().then(conn => {
+			conn.query(query, params).then(rows => {
 				conn.end();
 				if (callback) {
-					callback(err, result, fields);
+					callback(rows);
 				}
 
-				if (err) {
-					reject(err);
-					return;
-				}
-
-				resolve({result: result, fields: fields});
+				resolve({result: rows});
+			}).catch(err => {
+				reject(err);
 			});
+		}).catch(err => {
+			reject(err);
 		});
 	});
 }

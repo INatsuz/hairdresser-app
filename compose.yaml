@@ -10,4 +10,5 @@ services:
       - ./.env
     volumes:
       - /opt/fisiodesporto/backend/files/:/opt/hairdresser-backend/files/
-
+      - /home/vasco/fisio.vraminhos.com/:/opt/hairdresser-backend/ssl/
+    network_mode: bridge
