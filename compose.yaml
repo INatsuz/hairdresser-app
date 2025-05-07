@@ -2,6 +2,7 @@ name: fisiodesporto
 
 services:
   api:
+    restart: unless-stopped
     build: .
     ports:
       - "443:443"
