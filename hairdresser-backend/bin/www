@@ -11,7 +11,7 @@ const cert = fs.readFileSync(process.env.ENVIRONMENT === "DEV" ? "./ssl/cert.pem
  * Get port from environment and store in Express.
  */
 const https_port = normalizePort(process.env.PORT || '443');
-const http_port = 80;
+const http_port = process.env.PORT ? process.env.PORT + 1 : 80;
 app.set('port', https_port);
 
 /**

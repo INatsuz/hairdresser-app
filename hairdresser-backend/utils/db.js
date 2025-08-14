@@ -1,7 +1,5 @@
 const mariadb = require("mariadb");
 
-console.log("test");
-
 const pool = mariadb.createPool({
 	connectionLimit: 10,
 	host: process.env.DB_HOST,

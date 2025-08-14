@@ -27,7 +27,6 @@ export default function AppointmentAgenda() {
 	}
 
 	function reservationsKeyExtractor(dayAgenda, index) {
-		console.log(dayAgenda);
 		return `${dayAgenda.reservation.ID}`;
 	}
 
@@ -46,7 +45,6 @@ export default function AppointmentAgenda() {
 			});
 		}
 
-		console.log(agendaItems);
 		return agendaItems;
 	}
 
