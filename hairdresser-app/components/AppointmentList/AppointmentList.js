@@ -10,7 +10,7 @@ export default function AppointmentList(props) {
 	useEffect(function () {
 		if (isFocused) {
 			setRefreshing(true);
-			props.fetchAppointments().then(() => {
+			props.fetchAppointments(new Date()).then(() => {
 				setRefreshing(false);
 			}).catch(err => {
 				console.log(err);
@@ -31,7 +31,7 @@ export default function AppointmentList(props) {
 				refreshing={refreshing}
 				onRefresh={() => {
 					setRefreshing(true);
-					props.fetchAppointments().then(() => {
+					props.fetchAppointments(new Date()).then(() => {
 						setRefreshing(false);
 					});
 				}}

@@ -30,13 +30,13 @@ router.get('/getAppointments', mustBeAdmin, function (req, res) {
 	let queryFilter = "";
 
 	if (startDate) {
-		clauses.push("appointment.timeStart >= STR_TO_DATE(?, '%Y-%m-%dT%T.000Z')");
-		queryVariables.push(req.query.startDate);
+		clauses.push("appointment.timeStart >= ?");
+		queryVariables.push(new Date(req.query.startDate));
 	}
 
 	if (endDate) {
-		clauses.push("appointment.timeEnd < STR_TO_DATE(?, '%Y-%m-%dT%T.000Z')");
-		queryVariables.push(req.query.endDate);
+		clauses.push("appointment.timeEnd < ?");
+		queryVariables.push(new Date(req.query.endDate));
 	}
 
 	if (clauses.length > 0) {
@@ -55,6 +55,48 @@ router.get('/getAppointments', mustBeAdmin, function (req, res) {
 					ORDER BY appointment.timeStart ${!startDate && endDate ? "DESC" : "ASC"}
 					`, [...queryVariables]).then(({result}) => {
 		res.json(result);
+		console.log(result[result.length - 1]);
+	}).catch(err => {
+		console.log(err);
+		res.json(err);
+	});
+});
+
+router.get('/getMarkedDates', mustBeAdmin, function (req, res) {
+	let {startDate, endDate, timezone} = req.query;
+
+	if (!timezone) {
+		res.status(400).json({err: 'Timezone is required'});
+	}
+
+	let clauses = [];
+	let queryVariables = [];
+
+	let queryFilter = "";
+
+	queryVariables.push(req.query.timezone);
+
+	if (startDate) {
+		clauses.push("appointment.timeStart >= STR_TO_DATE(?, '%Y-%m-%dT%T.000Z')");
+		queryVariables.push(req.query.startDate);
+	}
+
+	if (endDate) {
+		clauses.push("appointment.timeEnd < STR_TO_DATE(?, '%Y-%m-%dT%T.000Z')");
+		queryVariables.push(req.query.endDate);
+	}
+
+	if (clauses.length > 0) {
+		queryFilter = "WHERE " + clauses.join(" AND ");
+	}
+
+	db.query(`SELECT ID, DATE(CONVERT_TZ(timeStart, 'UTC', ?)) as convertedTime
+					${queryFilter}
+					FROM appointment
+					GROUP BY convertedTime
+					`, [...queryVariables]).then(({result}) => {
+		res.json(result);
+		console.log(result[result.length - 1].convertedTime);
 	}).catch(err => {
 		console.log(err);
 		res.json(err);
@@ -72,7 +114,7 @@ router.get('/getAssignedAppointments', mustBeAuthenticated, function (req, res) 
 
 router.post('/addAppointment', mustBeAdmin, function (req, res) {
 	db.query("INSERT INTO appointment(serviceID, clientID, assignedUser, price, timeStart, timeEnd, observations) VALUES(?, ?, ?, ?, ?, ?, ?)",
-		[req.body.service, req.body.client, req.body.assignedUser, req.body.price, req.body.timeStart, req.body.timeEnd, req.body.observations]).then(({result}) => {
+		[req.body.service, req.body.client, req.body.assignedUser, req.body.price, new Date(req.body.timeStart), new Date(req.body.timeEnd), req.body.observations]).then(({result}) => {
 		res.status(200).send("Added new assignment successfully");
 		console.log("Added new assignment successfully");
 	}).catch(err => {
@@ -84,7 +126,7 @@ router.post('/addAppointment', mustBeAdmin, function (req, res) {
 
 router.put("/editAppointment", mustBeAdmin, function (req, res) {
 	db.query("UPDATE appointment SET serviceID = ?, clientID = ?, assignedUser = ?, price = ?, timeStart = ?, timeEnd = ?, observations = ? WHERE ID = ?",
-		[req.body.service, req.body.client, req.body.assignedUser, req.body.price, req.body.timeStart, req.body.timeEnd, req.body.observations, req.body.ID]).then(() => {
+		[req.body.service, req.body.client, req.body.assignedUser, req.body.price, new Date(req.body.timeStart), new Date(req.body.timeEnd), req.body.observations, req.body.ID]).then(() => {
 		res.status(200).send("Edited appointment successfully");
 		console.log("Edited appointment successfully");
 	}).catch(err => {
@@ -154,7 +196,6 @@ router.delete("/deleteClient/:ID", mustBeAdmin, function (req, res) {
 
 router.get('/getServices', mustBeAdmin, function (req, res) {
 	db.query("SELECT * FROM service").then(({result}) => {
-		console.log(result);
 		res.status(200).json(result);
 	}).catch(err => {
 		res.status(400);
@@ -198,7 +239,6 @@ router.delete("/deleteService/:ID", mustBeAdmin, function (req, res) {
 
 router.get("/getUsers", mustBeAdmin, function (req, res) {
 	db.query("SELECT ID, username, name, userType, notificationToken FROM appuser").then(({result}) => {
-		console.log(result);
 		res.status(200).json(result);
 	}).catch(err => {
 		res.status(400);

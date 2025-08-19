@@ -24,8 +24,8 @@ export default function AddAppointment({route: {params}, navigation}) {
 								client: appointment.clientID,
 								assignedUser: appointment.assignedUser ? appointment.assignedUser : null,
 								price: parseFloat(appointment.price) * 100,
-								timeStart: `${appointment.timeStart.getUTCFullYear()}-${appointment.timeStart.getUTCMonth() + 1}-${appointment.timeStart.getUTCDate()} ${appointment.timeStart.getUTCHours()}:${appointment.timeStart.getUTCMinutes()}:00`,
-								timeEnd: `${appointment.timeEnd.getUTCFullYear()}-${appointment.timeEnd.getUTCMonth() + 1}-${appointment.timeEnd.getUTCDate()} ${appointment.timeEnd.getUTCHours()}:${appointment.timeEnd.getUTCMinutes()}:00`,
+								timeStart: appointment.timeStart.getTime(),
+								timeEnd: appointment.timeEnd.getTime(),
 								observations: appointment.observations.trim()
 							}).then(() => {
 								navigation.navigate("Home");

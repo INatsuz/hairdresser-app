@@ -152,18 +152,21 @@ function extractTokenFromRequest(req, res) {
 
 	if (!auth) {
 		res.status(401).json({err: "Unauthorized"});
-		return;
+		return false;
 	}
 
 	if (!auth.startsWith("Bearer ")) {
 		res.status(401).json({err: "Unauthorized"});
-		return;
+		return false;
 	}
 	return auth.slice(7);
 }
 
 function mustBeAuthenticated(req, res, next) {
 	let accessToken = extractTokenFromRequest(req, res);
+	if (!accessToken) {
+		return;
+	}
 
 	jwt.verify(accessToken, JWT_SECRET, {}, function (err, payload) {
 		if (err) {
@@ -183,6 +186,9 @@ function mustBeAuthenticated(req, res, next) {
 
 function mustBeAdmin(req, res, next) {
 	let accessToken = extractTokenFromRequest(req, res);
+	if (!accessToken) {
+		return;
+	}
 
 	jwt.verify(accessToken, JWT_SECRET, {}, function (err, payload) {
 		if (err) {

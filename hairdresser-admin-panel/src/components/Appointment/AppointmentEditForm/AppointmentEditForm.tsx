@@ -99,8 +99,8 @@ const AppointmentEditForm: React.FC = () => {
 				client: client.ID,
 				assignedUser: user ? user.ID : null,
 				price: price,
-				timeStart: `${timeStart.getUTCFullYear()}-${timeStart.getUTCMonth() + 1}-${timeStart.getUTCDate()} ${timeStart.getUTCHours()}:${timeStart.getUTCMinutes()}:00`,
-				timeEnd: `${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth() + 1}-${timeEnd.getUTCDate()} ${timeEnd.getUTCHours()}:${timeEnd.getUTCMinutes()}:00`,
+				timeStart: timeStart.getTime(),
+				timeEnd: timeEnd.getTime(),
 				observations: observations.trim()
 			}).then(() => {
 				navigate("/appointments");

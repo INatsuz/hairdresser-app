@@ -1,12 +1,16 @@
-import {Agenda} from "react-native-calendars";
+import {Agenda, CalendarProvider} from "react-native-calendars";
 import useAppointments from "../../hooks/useAppointments";
-import {RefreshControl, StyleSheet, Text, TouchableOpacity} from "react-native";
-import {useEffect, useState} from "react";
+import {ActivityIndicator, RefreshControl, Text} from "react-native";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {useNavigation} from "@react-navigation/native";
+import useMarkedDates from "../../hooks/useMarkedDates";
+import {AppointmentAgendaItem} from "./AppointmentAgendaItem";
+import {formatDateString} from "../../utils/DateUtils";
 
 export default function AppointmentAgenda() {
-
-	const [appointments, setAppointments, fetchAppointments] = useAppointments();
+	const [currentDate, setCurrentDate] = useState(new Date());
+	const [appointments, setAppointments, fetchAppointments] = useAppointments(false);
+	const [markedDates, setMarkedDates, fetchMarkedDates] = useMarkedDates();
 
 	const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -14,23 +18,23 @@ export default function AppointmentAgenda() {
 
 	useEffect(() => {
 		return navigation.addListener('focus', () => {
-			fetchAppointments();
+			setIsRefreshing(true);
+			fetchMarkedDates();
+			fetchAppointments(currentDate).finally(() => setIsRefreshing((prev) => false));
 		});
 	}, [navigation]);
 
-	function handleRefresh() {
-		setAppointments([]);
-		setIsRefreshing(true);
-		fetchAppointments().finally(() => {
-			setIsRefreshing(false);
+	const formattedMarkedDates = useMemo(() => {
+		const markedDatesObject = {};
+		markedDates.forEach(markedDate => {
+			const date = new Date(markedDate.convertedTime);
+			markedDatesObject[`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`] = {marked: true};
 		});
-	}
 
-	function reservationsKeyExtractor(dayAgenda, index) {
-		return `${dayAgenda.reservation.ID}`;
-	}
+		return markedDatesObject;
+	}, [markedDates]);
 
-	function convertAppointmentsToAgendaItems(appointments) {
+	const formattedAgendaItems = useMemo(() => {
 		const agendaItems = {};
 
 		if (appointments.length > 0) {
@@ -45,81 +49,46 @@ export default function AppointmentAgenda() {
 			});
 		}
 
+		setIsRefreshing(false);
 		return agendaItems;
+	}, [appointments]);
+
+	const renderItem = useCallback((reservation, isFirst) => {
+		return <AppointmentAgendaItem reservation={reservation} isFirst={isFirst}/>
+	}, []);
+
+	const renderEmptyData = useCallback(() => {
+		if (isRefreshing) return <ActivityIndicator size="large" style={{marginTop: 20}}/>
+
+		return <Text style={{fontSize: 16, textAlign: "center", padding: 15}}>Nada aqui</Text>
+	}, [isRefreshing]);
+
+	function handleRefresh() {
+		setIsRefreshing(true);
+		fetchAppointments(currentDate)
 	}
 
-	const renderItem = (reservation, isFirst) => {
-		const fontSize = 16;
+	function reservationsKeyExtractor(dayAgenda, index) {
+		return `${dayAgenda.reservation.ID} + ${dayAgenda.reservation.timeStart}`;
+	}
 
-		return (
-			<TouchableOpacity
-				style={styles.item}
-				onPress={() => {
-					if (reservation && reservation.timeStart instanceof Date && reservation.timeEnd instanceof Date) {
-						reservation.timeStart = reservation.timeStart.toISOString();
-						reservation.timeEnd = reservation.timeEnd.toISOString();
-					}
-
-					navigation.navigate('EditAppointment', {
-						data: {...reservation}
-					});
-				}}
-			>
-				{reservation.timeStart instanceof Date &&
-					<Text style={{
-						fontSize: 18,
-						fontWeight: "bold"
-					}}>{String(reservation.timeStart.getHours()).padStart(2, "0") + ":" + String(reservation.timeStart.getMinutes()).padStart(2, "0")}</Text>
-				}
-				<Text style={{fontSize}}>{reservation.clientName}</Text>
-				<Text style={{fontSize}}>{reservation.serviceName}</Text>
-			</TouchableOpacity>
-		);
-	};
-
-	const renderEmptyData = () => {
-		return <Text style={{fontSize: 16, textAlign: "center", padding: 15}}>Nada aqui</Text>
+	function onDayPress({dateString}) {
+		const date = new Date(dateString);
+		setCurrentDate(date);
+		setIsRefreshing(true);
+		fetchAppointments(date)
 	}
 
 	return (
 		<Agenda
 			refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh}/>}
-			items={convertAppointmentsToAgendaItems(appointments)}
+			items={formattedAgendaItems}
+			markedDates={formattedMarkedDates}
 			showOnlySelectedDayItems={true}
 			renderEmptyData={renderEmptyData}
 			renderItem={renderItem}
+			onDayPress={onDayPress}
 			reservationsKeyExtractor={reservationsKeyExtractor}
 		/>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1
-	},
-
-	item: {
-		backgroundColor: 'white',
-		flex: 1,
-		borderRadius: 5,
-		padding: 10,
-		marginRight: 10,
-		marginTop: 17
-	},
-
-	emptyDate: {
-		height: 15,
-		flex: 1,
-		paddingTop: 30
-	},
-
-	customDay: {
-		margin: 10,
-		fontSize: 24,
-		color: 'green'
-	},
-
-	dayItem: {
-		marginLeft: 34
-	}
-});

@@ -1,23 +1,29 @@
 import {useEffect, useState} from "react";
 import {getWithAuth} from "../utils/Requester";
 
-export default function useAppointments(daily = false) {
+export default function useAppointments(shouldFetch = false) {
 
 	const [appointments, setAppointments] = useState([]);
 
 	useEffect(() => {
-		fetchAppointments();
+		if (!shouldFetch) return;
+
+		fetchAppointments(new Date());
 	}, []);
 
-	function fetchAppointments() {
-		const today = new Date();
-		today.setHours(0, 0, 0, 0);
-		const tomorrow = new Date(today);
-		tomorrow.setDate(tomorrow.getDate() + 1);
+	function fetchAppointments(day = undefined) {
+		let dateFilter = "";
 
-		const dateFilter = `?startDate=${today.toISOString()}&endDate=${tomorrow.toISOString()}`;
+		if (day) {
+			const startDate = new Date(day);
+			startDate.setHours(0, 0, 0, 0);
+			const endDate = new Date(startDate);
+			endDate.setDate(endDate.getDate() + 1);
 
-		return getWithAuth(`api/getAppointments${daily ? dateFilter : ""}`).then(res => {
+			dateFilter = `?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+		}
+
+		return getWithAuth(`api/getAppointments${day ? dateFilter : ""}`).then(res => {
 			res.data.forEach(ap => {
 				ap.timeStart = new Date(ap.timeStart);
 				ap.timeEnd = new Date(ap.timeEnd);
@@ -26,6 +32,7 @@ export default function useAppointments(daily = false) {
 			setAppointments(res.data);
 			return res;
 		}).catch(() => {
+			setAppointments([]);
 			console.log("Error fetching appointments");
 		});
 	}

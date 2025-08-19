@@ -6,7 +6,7 @@ const pool = mariadb.createPool({
 	user: process.env.DB_USERNAME,
 	password: process.env.DB_PASSWORD,
 	database: 'fisiodesporto',
-	timezone: 'Z',
+	timezone: 'local',
 	charset: 'utf8mb4'
 });
 
