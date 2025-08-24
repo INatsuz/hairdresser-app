@@ -1,16 +1,16 @@
-import {Agenda, CalendarProvider} from "react-native-calendars";
+import {Agenda} from "react-native-calendars";
 import useAppointments from "../../hooks/useAppointments";
 import {ActivityIndicator, RefreshControl, Text} from "react-native";
 import {useCallback, useEffect, useMemo, useState} from "react";
-import {useNavigation} from "@react-navigation/native";
+import {useIsFocused, useNavigation} from "@react-navigation/native";
 import useMarkedDates from "../../hooks/useMarkedDates";
 import {AppointmentAgendaItem} from "./AppointmentAgendaItem";
-import {formatDateString} from "../../utils/DateUtils";
 
 export default function AppointmentAgenda() {
 	const [currentDate, setCurrentDate] = useState(new Date());
 	const [appointments, setAppointments, fetchAppointments] = useAppointments(false);
 	const [markedDates, setMarkedDates, fetchMarkedDates] = useMarkedDates();
+	const isFocused = useIsFocused();
 
 	const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -18,11 +18,17 @@ export default function AppointmentAgenda() {
 
 	useEffect(() => {
 		return navigation.addListener('focus', () => {
-			setIsRefreshing(true);
-			fetchMarkedDates();
-			fetchAppointments(currentDate).finally(() => setIsRefreshing((prev) => false));
+
 		});
 	}, [navigation]);
+
+	useEffect(function () {
+		if (isFocused) {
+			setIsRefreshing(true);
+			fetchMarkedDates();
+			fetchAppointments(currentDate);
+		}
+	}, [isFocused]);
 
 	const formattedMarkedDates = useMemo(() => {
 		const markedDatesObject = {};

@@ -241,9 +241,7 @@ router.get("/getUsers", mustBeAdmin, function (req, res) {
 	db.query("SELECT ID, username, name, userType, notificationToken FROM appuser").then(({result}) => {
 		res.status(200).json(result);
 	}).catch(err => {
-		res.status(400);
-		console.log(err);
-		res.json(err);
+		res.status(400).json(err);
 	});
 });
 
@@ -277,7 +275,6 @@ router.post("/saveClientFile", upload.single('file'), mustBeAdmin, function (req
 
 router.get("/getClientFiles", mustBeAdmin, function (req, res, next) {
 	db.query("SELECT * FROM clientFiles WHERE clientID = ?", [req.query.clientID]).then(({result}) => {
-		console.log(result);
 		res.status(200).json(result);
 	}).catch(err => {
 		console.log(err);

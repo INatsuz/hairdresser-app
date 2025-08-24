@@ -12,6 +12,7 @@ export default function useAppointments(shouldFetch = false) {
 	}, []);
 
 	function fetchAppointments(day = undefined) {
+		console.log(day);
 		let dateFilter = "";
 
 		if (day) {
